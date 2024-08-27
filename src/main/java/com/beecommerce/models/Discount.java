@@ -2,6 +2,7 @@ package com.beecommerce.models;
 
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.List;
 @ToString
 public class Discount {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
 
     private String description;
     private Double discountPercentage;

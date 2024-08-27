@@ -2,6 +2,7 @@ package com.beecommerce.models;
 
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.util.List;
 
@@ -13,15 +14,12 @@ import java.util.List;
 @Setter
 public class Supplier {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
     private String name;
     private String address;
     private String phone;
     private String email;
     @Relationship(type = "SUPPLIES")
     private List<Product> products;
-
-
-
 }

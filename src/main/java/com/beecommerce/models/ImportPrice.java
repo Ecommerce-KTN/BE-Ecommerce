@@ -2,6 +2,7 @@ package com.beecommerce.models;
 
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
 
@@ -14,8 +15,8 @@ import java.time.LocalDateTime;
 @ToString
 public class ImportPrice {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
 
     private Double price;
     private LocalDateTime effectiveDate;

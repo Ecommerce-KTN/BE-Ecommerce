@@ -32,6 +32,8 @@ public class Product {
     @Relationship(type = "SUPPLIES", direction = Relationship.Direction.INCOMING)
     private Supplier supplier;
 
+    @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.INCOMING)
+    private List<OrderDetail> orderDetails;
 
 
 
