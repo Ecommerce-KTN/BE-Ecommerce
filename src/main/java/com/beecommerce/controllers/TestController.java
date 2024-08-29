@@ -13,20 +13,20 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class TestController {
-    @GetMapping("/heartbeat")
-    public String heartbeat() {
-        return "OK";
-    }
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    @GetMapping("/categories")
-    public String getAll() {
-        Optional<Category> c = categoryRepository.findAll().stream().findFirst();
-        return c.toString();
-    }
+//    @GetMapping("/heartbeat")
+//    public String heartbeat() {
+//        return "OK";
+//    }
+//
+//    @Autowired
+//    private CategoryService categoryService;
+//
+//    @Autowired
+//    private CategoryRepository categoryRepository;
+//
+//    @GetMapping("/categories")
+//    public String getAll() {
+//        Optional<Category> c = categoryRepository.findAll().stream().findFirst();
+//        return c.toString();
+//    }
 }
