@@ -17,11 +17,16 @@ public class Product {
     private String id;
     private String name;
     private String description;
+    private String brand; // Added brand name
     private List<String> image;
+    private String primaryImage;
     private Double rating;
     private int sold;
+    private int numberOfReviews; // Added number of reviews
+    private Double oldPrice; // Added old price
+    private Double currentPrice; // Added current price
     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.INCOMING)
-    private Category category;
+    private List<Category> categories; //Update
 
     @Relationship(type = "HAS_IMPORT_PRICES", direction = Relationship.Direction.OUTGOING)
     private List<ImportPrice> importPrices;
