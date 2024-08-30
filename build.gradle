@@ -17,7 +17,10 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
+
 }
+
 
 repositories {
 	mavenCentral()
@@ -32,6 +35,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.770'
 }
 
 tasks.named('test') {

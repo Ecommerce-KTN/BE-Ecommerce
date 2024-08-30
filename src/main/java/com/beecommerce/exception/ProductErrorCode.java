@@ -1,0 +1,23 @@
+package com.beecommerce.exception;
+
+import org.springframework.http.HttpStatus;
+import lombok.Getter;
+
+@Getter
+public enum ProductErrorCode {
+    PRODUCT_NOT_FOUND(404, "Product not found", HttpStatus.NOT_FOUND),
+    PRODUCT_ALREADY_EXISTS(400, "Product already exists", HttpStatus.BAD_REQUEST),
+    INVALID_PRODUCT_ID(400, "Invalid product ID", HttpStatus.BAD_REQUEST),
+    PRODUCT_OUT_OF_STOCK(400, "Product out of stock", HttpStatus.BAD_REQUEST),
+    DATABASE_ERROR(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
+    DUPLICATE_PRODUCT_ID(409, "Duplicate product ID", HttpStatus.CONFLICT);
+    private final int code;
+    private final String message;
+    private final HttpStatus statusCode;
+
+    ProductErrorCode(int code, String message, HttpStatus statusCode) {
+        this.code = code;
+        this.message = message;
+        this.statusCode = statusCode;
+    }
+}
