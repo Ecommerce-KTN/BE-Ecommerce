@@ -26,4 +26,7 @@ public class ProductResponse {
     private List<SalePrice> salePrices;
     private Supplier supplier;
     private List<OrderDetail> orderDetails;
+
+    public ProductResponse(Product product) {
+    }
 }

@@ -4,6 +4,7 @@ import com.beecommerce.dto.reponse.ProductResponse;
 import com.beecommerce.dto.request.ProductRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
+import com.beecommerce.models.OrderDetail;
 import com.beecommerce.models.Product;
 import com.beecommerce.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -55,7 +56,41 @@ public class ProductService implements ProductInterface {
                 .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
         productRepository.delete(product);
     }
-    private Product convertToEntity(ProductRequest productRequest) {
+
+    //Favorite
+    public Optional<ProductResponse> toggleFavorite(String id) {
+        Optional<Product> productOpt = productRepository.findById(id);
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            product.setFavorited(!product.isFavorited());
+            productRepository.save(product);
+            return Optional.of(new ProductResponse(product));
+        }
+        return Optional.empty();
+    }
+
+    public boolean isProductFavorited(String id) {
+        return productRepository.findById(id)
+                .map(Product::isFavorited)
+                .orElse(false);
+    }
+
+    public String checkStockAvailability(String productId, int quantity){
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+        int currentStok = product.getOrderDetails().stream()
+                .filter(orderDetail -> orderDetail.getProduct().getId().equals(productId))
+                .mapToInt(OrderDetail::getQuantity)
+                .sum();
+        if (currentStok >= quantity) {
+            return "Stock is sufficient.";
+        } else {
+            return "Insufficient stock available.";
+        }
+    }
+
+
+    public Product convertToEntity(ProductRequest productRequest) {
         Product product = new Product();
         BeanUtils.copyProperties(productRequest, product);
         return product;

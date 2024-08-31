@@ -27,6 +27,7 @@ public class Product {
     private int numberOfReviews; // Added number of reviews
     private Double oldPrice; // Added old price
     private Double currentPrice; // Added current price
+    private boolean isFavorited; // Added isFavorited property
     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.INCOMING)
     private List<Category> categories; //Update
 
