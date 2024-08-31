@@ -1,4 +1,6 @@
 package com.beecommerce.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
@@ -29,6 +31,7 @@ public class Product {
     private List<Category> categories; //Update
 
     @Relationship(type = "HAS_IMPORT_PRICES", direction = Relationship.Direction.OUTGOING)
+    @JsonIgnore
     private List<ImportPrice> importPrices;
 
     @Relationship(type = "HAS_SALE_PRICES", direction = Relationship.Direction.OUTGOING)

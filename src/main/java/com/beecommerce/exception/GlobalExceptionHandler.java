@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ProductException.class)
-    public ResponseEntity<ErrorResponse> handleProductException(ProductException ex) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleProductException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 ex.getErrorCode().getCode(),
                 ex.getErrorCode().getMessage()

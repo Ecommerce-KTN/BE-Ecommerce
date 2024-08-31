@@ -1,7 +1,9 @@
 package com.beecommerce.services;
 
-import com.beecommerce.exception.ProductErrorCode;
-import com.beecommerce.exception.ProductException;
+import com.beecommerce.dto.reponse.ProductResponse;
+import com.beecommerce.dto.request.ProductRequest;
+import com.beecommerce.exception.ErrorCode;
+import com.beecommerce.exception.Exception;
 import com.beecommerce.models.Product;
 import com.beecommerce.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements ProductInterface {
@@ -18,35 +21,48 @@ public class ProductService implements ProductInterface {
     private ProductRepository productRepository;
 
     @Override
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        Product product = convertToEntity(productRequest);
+        Product savedProduct = productRepository.save(product);
+        return convertToResponse(savedProduct);
     }
-
     @Override
-    public Optional<Product> updateProduct(String id, Product productDetails) {
+    public Optional<ProductResponse> updateProduct(String id, ProductRequest productRequest) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
 
-        BeanUtils.copyProperties(productDetails, product, "id");
+        BeanUtils.copyProperties(productRequest, product, "id");
         Product updatedProduct = productRepository.save(product);
-        return Optional.of(updatedProduct);
+        return Optional.of(convertToResponse(updatedProduct));
+    }
+    @Override
+    public List<ProductResponse> getAllProduct() {
+        return productRepository.findAll().stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Product> getAllProduct() {
-        return productRepository.findAll();
-    }
-
-    @Override
-    public Optional<Product> getProductById(String id) {
+    public Optional<ProductResponse> getProductById(String id) {
         return Optional.ofNullable(productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND)));
+                .map(this::convertToResponse)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND)));
     }
 
     @Override
     public void deleteProduct(String id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
         productRepository.delete(product);
+    }
+    private Product convertToEntity(ProductRequest productRequest) {
+        Product product = new Product();
+        BeanUtils.copyProperties(productRequest, product);
+        return product;
+    }
+    public ProductResponse convertToResponse(Product product) {
+        ProductResponse response = new ProductResponse();
+        BeanUtils.copyProperties(product, response);
+        return response;
     }
 }

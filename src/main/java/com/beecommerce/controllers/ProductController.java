@@ -1,7 +1,9 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.exception.ProductErrorCode;
-import com.beecommerce.exception.ProductException;
+import com.beecommerce.dto.reponse.ProductResponse;
+import com.beecommerce.dto.request.ProductRequest;
+import com.beecommerce.exception.ErrorCode;
+import com.beecommerce.exception.Exception;
 import com.beecommerce.models.Product;
 import com.beecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,33 +20,32 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product createdProduct = productService.createProduct(product);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest product) {
+        ProductResponse createdProduct = productService.createProduct(product);
         return ResponseEntity.ok(createdProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product productDetails) {
-        Product updatedProduct = productService.updateProduct(id, productDetails)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id, @RequestBody ProductRequest productDetails) {
+        ProductResponse updatedProduct = productService.updateProduct(id, productDetails)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
         return ResponseEntity.ok(updatedProduct);
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         return productService.getAllProduct();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable String id) {
-        Product product = productService.getProductById(id)
-                .orElseThrow(() -> new ProductException(ProductErrorCode.PRODUCT_NOT_FOUND));
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable String id) {
+        ProductResponse product = productService.getProductById(id)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
         return ResponseEntity.ok(product);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
-        // No need for orElseThrow since the service method already handles the exception
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
