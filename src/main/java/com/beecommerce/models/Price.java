@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class SalePrice {
+public class Price {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
@@ -22,9 +22,6 @@ public class SalePrice {
     private Double price;
     private LocalDateTime effectiveDate;
 
-    @Relationship(type = "APPLIES_TO", direction = Relationship.Direction.INCOMING)
-    private Discount discount;
-
-    @Relationship(type = "HAS_SALE_PRICES", direction = Relationship.Direction.INCOMING)
+    @Relationship(type = "HAS_PRICES", direction = Relationship.Direction.INCOMING)
     private Product product;
 }

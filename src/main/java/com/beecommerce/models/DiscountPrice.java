@@ -7,21 +7,26 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-@Data
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Node
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class OrderDetail {
+public class DiscountPrice {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.INCOMING)
-    private Order order;
+    private Double price;
+    private LocalDateTime effectiveDate;
+    private LocalDateTime expiredDate;
+    private LocalDateTime endDate;
 
-    @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "HAS_DISCOUNT_PRICES", direction = Relationship.Direction.INCOMING)
     private Product product;
-    private int quantity;
+
 }

@@ -22,8 +22,8 @@ public class ProductResponse {
     private Double oldPrice;
     private Double currentPrice;
     private List<CategoryResponse> categories;
-    private List<ImportPrice> importPrices;
-    private List<SalePrice> salePrices;
+    private List<CostPrice> importPrices;
+    private List<Price> salePrices;
     private Supplier supplier;
     private List<OrderDetail> orderDetails;
 

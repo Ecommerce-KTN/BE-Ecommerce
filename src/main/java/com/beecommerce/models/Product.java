@@ -1,6 +1,5 @@
 package com.beecommerce.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
@@ -24,25 +23,28 @@ public class Product {
     private String primaryImage;
     private Double rating;
     private int sold;
-    private int numberOfReviews; // Added number of reviews
-    private Double oldPrice; // Added old price
-    private Double currentPrice; // Added current price
-    private boolean isFavorited; // Added isFavorited property
-    @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.INCOMING)
-    private List<Category> categories; //Update
+    private String sellingType;
 
-    @Relationship(type = "HAS_IMPORT_PRICES", direction = Relationship.Direction.OUTGOING)
-    @JsonIgnore
-    private List<ImportPrice> importPrices;
+    @Relationship(type = "HAS_CATEGORY", direction = Relationship.Direction.OUTGOING)
+    private Category category;
 
-    @Relationship(type = "HAS_SALE_PRICES", direction = Relationship.Direction.OUTGOING)
-    private List<SalePrice> salePrices;
+    @Relationship(type = "HAS_COST_PRICES", direction = Relationship.Direction.OUTGOING)
+    private List<CostPrice> costPrices;
 
-    @Relationship(type = "SUPPLIES", direction = Relationship.Direction.INCOMING)
-    private Supplier supplier;
+    @Relationship(type = "HAS_PRICES", direction = Relationship.Direction.OUTGOING)
+    private List<Price> prices;
+
+    @Relationship(type = "HAS_DISCOUNT_PRICES", direction = Relationship.Direction.OUTGOING)
+    private List<DiscountPrice> discountPrices;
 
     @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.INCOMING)
     private List<OrderDetail> orderDetails;
+
+    @Relationship(type = "HAS_REVIEW", direction = Relationship.Direction.INCOMING)
+    private List<Review> reviews;
+
+
+
 
 
 

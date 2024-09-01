@@ -21,8 +21,17 @@ public class Customer {
     private String address;
     private String phone;
     private String email;
+    private String username;
+    private String password;
+    private List<Product> products;
 
     @Relationship(type = "HAS_ORDER", direction = Relationship.Direction.OUTGOING)
     private List<Order> orders;
+
+    @Relationship(type = "RATED_BY", direction = Relationship.Direction.INCOMING)
+    private List<Review> reviews;
+
+
+
 
 }

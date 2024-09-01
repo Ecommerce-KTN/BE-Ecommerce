@@ -1,29 +1,27 @@
 package com.beecommerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@Node
 @AllArgsConstructor
 @NoArgsConstructor
+@Node
 @Getter
 @Setter
 @ToString
-public class Discount {
+public class CostPrice {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
 
-    private String description;
-    private Double discountPercentage;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private Double price;
+    private LocalDateTime effectiveDate;
 
-    @Relationship(type = "APPLIES_TO")
-    private List<SalePrice> salePrices;
+    @Relationship(type = "HAS_COST_PRICES", direction = Relationship.Direction.INCOMING)
+    private Product product;
 }

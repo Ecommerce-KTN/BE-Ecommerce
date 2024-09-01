@@ -1,7 +1,7 @@
 package com.beecommerce.dto.request;
-import com.beecommerce.models.ImportPrice;
+import com.beecommerce.models.CostPrice;
 import com.beecommerce.models.OrderDetail;
-import com.beecommerce.models.SalePrice;
+import com.beecommerce.models.Price;
 import lombok.*;
 import java.util.List;
 
@@ -22,8 +22,8 @@ public class ProductRequest {
     private Double oldPrice;
     private Double currentPrice;
     private List<String> categoryIds;
-    private List<ImportPrice> importPrices;
-    private List<SalePrice> salePrices;
+    private List<CostPrice> importPrices;
+    private List<Price> salePrices;
     private String supplierId;
     private List<OrderDetail> orderDetails;
 }

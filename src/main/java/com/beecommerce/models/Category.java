@@ -20,6 +20,11 @@ public class Category {
     private String name;
     private String description;
     private String image;
+    private String parentId;
+
+    @Relationship(type = "HAS_CATEGORY", direction = Relationship.Direction.OUTGOING)
+    private List<Category> categories;
+
     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.OUTGOING)
     private List<Product> products;
 
