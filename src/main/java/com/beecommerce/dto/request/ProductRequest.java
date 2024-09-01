@@ -1,5 +1,6 @@
 package com.beecommerce.dto.request;
 import com.beecommerce.models.CostPrice;
+import com.beecommerce.models.DiscountPrice;
 import com.beecommerce.models.OrderDetail;
 import com.beecommerce.models.Price;
 import lombok.*;
@@ -18,12 +19,9 @@ public class ProductRequest {
     private String primaryImage;
     private Double rating;
     private int sold;
-    private int numberOfReviews;
-    private Double oldPrice;
-    private Double currentPrice;
-    private List<String> categoryIds;
-    private List<CostPrice> importPrices;
-    private List<Price> salePrices;
-    private String supplierId;
+    private String categoryIds;
+    private List<CostPrice> costPrices;
+    private List<Price> prices;
+    private List<DiscountPrice> discountPrices;
     private List<OrderDetail> orderDetails;
 }

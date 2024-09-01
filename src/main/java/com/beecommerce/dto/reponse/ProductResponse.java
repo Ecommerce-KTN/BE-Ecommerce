@@ -18,13 +18,10 @@ public class ProductResponse {
     private String primaryImage;
     private Double rating;
     private int sold;
-    private int numberOfReviews;
-    private Double oldPrice;
-    private Double currentPrice;
-    private List<CategoryResponse> categories;
+    private Category categories;
     private List<CostPrice> importPrices;
-    private List<Price> salePrices;
-    private Supplier supplier;
+    private List<Price> prices;
+    private List<DiscountPrice> discountPrices;
     private List<OrderDetail> orderDetails;
 
     public ProductResponse(Product product) {
