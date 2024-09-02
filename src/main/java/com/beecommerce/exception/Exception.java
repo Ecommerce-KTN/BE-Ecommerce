@@ -4,10 +4,16 @@ import lombok.Getter;
 
 @Getter
 public class Exception extends RuntimeException {
-    private final ErrorCode errorCode;
+    private  ErrorCode errorCode;
+    private  SuccessCode successCode;
 
     public Exception(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
+    public Exception(SuccessCode successCode) {
+        super(successCode.getMessage());
+        this.successCode = successCode;
+    }
+
 }

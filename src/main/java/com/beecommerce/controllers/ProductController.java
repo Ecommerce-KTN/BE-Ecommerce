@@ -2,8 +2,10 @@ package com.beecommerce.controllers;
 
 import com.beecommerce.dto.reponse.ProductResponse;
 import com.beecommerce.dto.request.ProductRequest;
+import com.beecommerce.dto.request.ReviewRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
+import com.beecommerce.exception.SuccessCode;
 import com.beecommerce.models.Product;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
@@ -58,12 +60,6 @@ public class ProductController {
                 .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    @GetMapping("/{id}/isFavorited")
-    public ResponseEntity<Boolean> isProductFavorited(@PathVariable String id) {
-        boolean isFavorited = productService.isProductFavorited(id);
-        return ResponseEntity.ok(isFavorited);
-    }
-
     @GetMapping("/check-stock")
     public ResponseEntity<String> checkStockAvailability( @RequestParam("productId") String productId,
     @RequestParam("quantity") int quantity) {
@@ -76,4 +72,17 @@ public class ProductController {
         String message = cartService.addItemToCart(productId, quantity);
         return ResponseEntity.ok(message);
     }
+    @GetMapping("/check-name-unique")
+    public ResponseEntity<Boolean> checkProductNameUnique(@RequestParam("name") String name) {
+        boolean isUnique = productService.isProductNameUnique(name);
+        return ResponseEntity.ok(isUnique);
+    }
+
+    @PostMapping("/add-review")
+    public ResponseEntity<String> addReviewToProduct(@RequestBody ReviewRequest reviewRequest) {
+        productService.addReviewToProduct(reviewRequest);
+        return ResponseEntity.status(SuccessCode.PRODUCT_ADD_REVIEW.getStatusCode())
+                .body(SuccessCode.PRODUCT_ADD_REVIEW.getMessage());
+    }
+
 }

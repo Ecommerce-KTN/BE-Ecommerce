@@ -36,6 +36,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.770'
+	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
 }
 
 tasks.named('test') {

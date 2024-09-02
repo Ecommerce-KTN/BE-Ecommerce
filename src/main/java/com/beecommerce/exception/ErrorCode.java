@@ -13,7 +13,8 @@ public enum ErrorCode {
     INVALID_CATEGORY_ID(400, "Invalid category ID", HttpStatus.BAD_REQUEST),
     PRODUCT_OUT_OF_STOCK(400, "Product out of stock", HttpStatus.BAD_REQUEST),
     DATABASE_ERROR(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
-    DUPLICATE_PRODUCT_ID(409, "Duplicate product ID", HttpStatus.CONFLICT);
+    DUPLICATE_PRODUCT_ID(409, "Duplicate product ID", HttpStatus.CONFLICT),
+    CUSTOMER_NOT_FOUND(404, "Customer not found", HttpStatus.NOT_FOUND);
     private final int code;
     private final String message;
     private final HttpStatus statusCode;

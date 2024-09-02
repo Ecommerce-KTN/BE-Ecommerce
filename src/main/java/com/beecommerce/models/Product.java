@@ -1,5 +1,7 @@
 package com.beecommerce.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
@@ -16,9 +18,11 @@ public class Product {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
+    @NotBlank(message = "Product name cannot be empty.")
+    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
     private String description;
-    private String brand; // Added brand name
+    private String brand;
     private List<String> image;
     private String primaryImage;
     private Double rating;
@@ -43,11 +47,8 @@ public class Product {
     @Relationship(type = "HAS_REVIEW", direction = Relationship.Direction.INCOMING)
     private List<Review> reviews;
 
-
-
-
-
-
-
+    public int getNoOfReviews() {
+        return reviews != null ? reviews.size() : 0;
+    }
 
 }

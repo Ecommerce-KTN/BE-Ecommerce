@@ -12,5 +12,7 @@ public class CategoryRequest {
     private String name;
     private String description;
     private String image;
+    private String parentId;
     private List<String> productIds;
+    private List<String> categoryIds;
 }
