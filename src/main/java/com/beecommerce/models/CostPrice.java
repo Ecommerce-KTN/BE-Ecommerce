@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Node
 @Getter
 @Setter
-@ToString
+
 public class CostPrice {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -24,4 +24,13 @@ public class CostPrice {
 
     @Relationship(type = "HAS_COST_PRICES", direction = Relationship.Direction.INCOMING)
     private Product product;
+
+    @Override
+    public String toString() {
+        return "CostPrice{" +
+                "id='" + id + '\'' +
+                ", price=" + price +
+                ", effectiveDate=" + effectiveDate +
+                '}';
+    }
 }

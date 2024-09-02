@@ -14,4 +14,5 @@ public interface CategoryInterface {
     void deleteCategory(String id);
     List<CategoryResponse> getParentCategories();
     List<CategoryResponse> getCategoriesByParentId(String parentId);
+    CategoryResponse createChildCategory(String parentId, CategoryRequest categoryRequest);
 }

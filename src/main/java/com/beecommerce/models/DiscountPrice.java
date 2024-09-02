@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class DiscountPrice {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -28,5 +28,16 @@ public class DiscountPrice {
 
     @Relationship(type = "HAS_DISCOUNT_PRICES", direction = Relationship.Direction.INCOMING)
     private Product product;
+
+    @Override
+    public String toString() {
+        return "DiscountPrice{" +
+                "id='" + id + '\'' +
+                ", price=" + price +
+                ", effectiveDate=" + effectiveDate +
+                ", expiredDate=" + expiredDate +
+                ", endDate=" + endDate +
+                '}';
+    }
 
 }

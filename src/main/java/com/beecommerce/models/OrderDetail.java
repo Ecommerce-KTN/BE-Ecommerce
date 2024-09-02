@@ -13,7 +13,6 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class OrderDetail {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -24,4 +23,14 @@ public class OrderDetail {
     @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.OUTGOING)
     private Product product;
     private int quantity;
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "id='" + id + '\'' +
+                ", order=" + order.getId() +
+                ", product=" + product.getId() +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

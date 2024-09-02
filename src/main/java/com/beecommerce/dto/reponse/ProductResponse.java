@@ -13,15 +13,23 @@ public class ProductResponse {
     private String id;
     private String name;
     private String description;
-    private String brand;
-    private List<String> image;
+    private List<String> images;
     private String primaryImage;
     private Double rating;
     private int sold;
-    private Category categories;
-    private List<CostPrice> importPrices;
-    private List<Price> prices;
-    private List<DiscountPrice> discountPrices;
+    private int quantity;
+    private String sellingType;
+    private Double weight;
+    private Double breadth;
+    private Double width;
+    private Double length;
+    private String unitOfMass;
+    private String unitOfLength;
+    private String parentCategoryId;
+    private String categoryId;
+    private Double costPrice;
+    private Double price;
+    private Double discountPrice;
     private List<OrderDetail> orderDetails;
 
     public ProductResponse(Product product) {

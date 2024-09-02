@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class Category {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -27,5 +27,17 @@ public class Category {
 
     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.OUTGOING)
     private List<Product> products;
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", image='" + image + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", categories=" +categories.stream().map(Category::getId).toList() +
+                '}';
+    }
 
 }

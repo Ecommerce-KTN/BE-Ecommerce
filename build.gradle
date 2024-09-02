@@ -27,16 +27,20 @@ repositories {
 }
 
 dependencies {
+	implementation platform('software.amazon.awssdk:bom:2.27.17')
+	implementation 'software.amazon.awssdk:apache-client:2.27.17'
+
 	implementation 'org.springframework.data:spring-data-neo4j:7.3.3'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	compileOnly 'org.projectlombok:lombok'
+	implementation 'software.amazon.awssdk:aws-sdk-java:2.27.17'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.770'
 	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'
+
 }
 
 tasks.named('test') {

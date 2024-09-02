@@ -1,32 +1,100 @@
 package com.beecommerce.controllers;
 
+import com.beecommerce.dto.reponse.ApiResponse;
 import com.beecommerce.dto.reponse.ProductResponse;
 import com.beecommerce.dto.request.ProductRequest;
 import com.beecommerce.dto.request.ReviewRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
 import com.beecommerce.exception.SuccessCode;
-import com.beecommerce.models.Product;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
+import com.beecommerce.services.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
 public class ProductController {
 
     @Autowired
     private ProductService productService;
     @Autowired
     private CartService cartService;
+    @Autowired
+    private final S3Service s3Service;
+
+
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest product) {
-        ProductResponse createdProduct = productService.createProduct(product);
-        return ResponseEntity.ok(createdProduct);
+    public ResponseEntity<ApiResponse> createProduct(@ModelAttribute ProductRequest productRequest) {
+        if (productRequest.getPrimaryImage().isEmpty()) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .status(400)
+                    .message("Primary Image is required")
+                    .build());
+        }
+        if (productRequest.getPrimaryImage().getSize() > 100 * 1024 * 1024) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .status(400)
+                    .message("Primary Image size must be less than 100MB")
+                    .build());
+        }
+
+        // Validate image list
+        if (productRequest.getImages().size() > 10) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .status(400)
+                    .message("Number of images must be less than 10")
+                    .build());
+        }
+        for (MultipartFile image : productRequest.getImages()) {
+            if (image.getSize() > 100 * 1024 * 1024) {
+                return ResponseEntity.badRequest().body(ApiResponse.builder()
+                        .status(400)
+                        .message("Image size must be less than 100MB")
+                        .build());
+            }
+        }
+
+        // Upload images to S3
+        List<String> imageUrls = new ArrayList<>();
+        if(productRequest.getImages() != null) {
+            for (MultipartFile image : productRequest.getImages()) {
+                try {
+                    imageUrls.add(s3Service.uploadFileToS3(image));
+                } catch (Exception e) {
+                    return ResponseEntity.badRequest().body(ApiResponse.builder()
+                            .status(400)
+                            .message(e.getMessage())
+                            .build());
+                }
+            }
+        }
+
+        // Upload primary image to S3
+        String primaryImageUrl;
+        try {
+            primaryImageUrl = s3Service.uploadFileToS3(productRequest.getPrimaryImage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .status(400)
+                    .message(e.getMessage())
+                    .build());
+        }
+
+        // Create product
+        ProductResponse createdProduct = productService.createProduct(productRequest, primaryImageUrl, imageUrls);
+        return ResponseEntity.badRequest().body(ApiResponse.builder()
+                .status(400)
+                .data(createdProduct)
+                .build());
     }
 
     @PutMapping("/{id}")

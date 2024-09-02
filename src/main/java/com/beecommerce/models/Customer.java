@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Node
-@ToString
+
 public class Customer {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -31,7 +31,18 @@ public class Customer {
     @Relationship(type = "RATED_BY", direction = Relationship.Direction.INCOMING)
     private List<Review> reviews;
 
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 
 
 }

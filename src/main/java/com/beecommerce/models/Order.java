@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class Order {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -26,7 +26,17 @@ public class Order {
     private LocalDateTime orderDate;
     private String address;
 
-
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", orderDetails=" + orderDetails +
+                ", customer=" + customer.getId() +
+                ", status='" + status + '\'' +
+                ", orderDate=" + orderDate +
+                ", address='" + address + '\'' +
+                '}';
+    }
 
 
 }

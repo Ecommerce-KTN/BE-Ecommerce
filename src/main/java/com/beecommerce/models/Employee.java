@@ -12,7 +12,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class Employee {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -25,5 +25,20 @@ public class Employee {
     private String password;
     private String role;
     private String status;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 
 }

@@ -24,6 +24,16 @@ public class CategoryController {
         CategoryResponse createdCategory = categoryService.createCategory(categoryRequest);
         return ResponseEntity.ok(createdCategory);
     }
+//    create child Category của  cha có id
+    @PostMapping("/parent/{parentId}")
+    public ResponseEntity<CategoryResponse> createChildCategory(@PathVariable String parentId, @RequestBody CategoryRequest categoryRequest) {
+        CategoryResponse createdCategory = categoryService.createChildCategory(parentId, categoryRequest);
+        return ResponseEntity.ok(createdCategory);
+    }
+
+
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable String id, @RequestBody CategoryRequest categoryDetails) {

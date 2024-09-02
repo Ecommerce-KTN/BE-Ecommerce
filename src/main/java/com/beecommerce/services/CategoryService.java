@@ -84,6 +84,18 @@ public class CategoryService implements CategoryInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public CategoryResponse createChildCategory(String parentId, CategoryRequest categoryRequest) {
+        Category parentCategory = categoryRepository.findById(parentId)
+                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+        Category category = convertToEntity(categoryRequest);
+        category.setParentId(parentId);
+        Category savedCategory = categoryRepository.save(category);
+        parentCategory.getCategories().add(savedCategory);
+        categoryRepository.save(parentCategory);
+        return convertToResponse(savedCategory);
+    }
+
 
     public Category convertToEntity(CategoryRequest categoryRequest) {
         Category category = new Category();

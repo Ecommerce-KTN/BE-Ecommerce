@@ -13,7 +13,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class Review {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
@@ -26,4 +26,13 @@ public class Review {
 
      @Relationship(type = "RATED_PRODUCT", direction = Relationship.Direction.OUTGOING)
      private Product product;
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id='" + id + '\'' +
+                ", rating=" + rating +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }
