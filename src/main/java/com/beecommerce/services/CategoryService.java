@@ -1,6 +1,7 @@
 package com.beecommerce.services;
 
 import com.beecommerce.dto.reponse.CategoryResponse;
+import com.beecommerce.dto.reponse.ProductResponse;
 import com.beecommerce.dto.request.CategoryRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +24,8 @@ public class CategoryService implements CategoryInterface {
     private CategoryRepository categoryRepository;
     @Override
     public List<CategoryResponse> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        return categories.stream()
+        return categoryRepository.findAllByOrderByCreatedTimeDesc()
+                .stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
@@ -40,6 +42,7 @@ public class CategoryService implements CategoryInterface {
         category.setName(categoryRequest.getName());
         category.setDescription(categoryRequest.getDescription());
         category.setImage(categoryRequest.getImage());
+        category.setCreatedTime(LocalDateTime.now());
         Category savedCategory = categoryRepository.save(category);
         return convertToResponse(savedCategory);
     }
@@ -105,6 +108,7 @@ public class CategoryService implements CategoryInterface {
     public CategoryResponse convertToResponse(Category category) {
         CategoryResponse response = new CategoryResponse();
         BeanUtils.copyProperties(category, response);
+        response.setCreateTime(category.getCreatedTime());
         return response;
     }
 

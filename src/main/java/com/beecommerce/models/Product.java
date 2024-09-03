@@ -1,16 +1,19 @@
 package com.beecommerce.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.*;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Node
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -39,7 +42,8 @@ public class Product {
     private Double costPrice;
     private Double price;
     private Double discountPrice;
-
+    @CreatedDate
+    private LocalDateTime createdTime;
 
     @Relationship(type = "HAS_CATEGORY", direction = Relationship.Direction.OUTGOING)
     private Category category;
@@ -58,6 +62,10 @@ public class Product {
 
     @Relationship(type = "HAS_REVIEW", direction = Relationship.Direction.INCOMING)
     private List<Review> reviews;
+
+    public Product() {
+        this.createdTime = LocalDateTime.now();
+    }
 
     public int getNoOfReviews() {
         return reviews != null ? reviews.size() : 0;
@@ -87,6 +95,7 @@ public class Product {
                 ", costPrice=" + costPrice +
                 ", price=" + price +
                 ", discountPrice=" + discountPrice +
+                ", createTime=" + createdTime +
                 ", reviews=" + reviews +
                 '}';
     }

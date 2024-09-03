@@ -2,6 +2,8 @@ package com.beecommerce.dto.reponse;
 
 import com.beecommerce.models.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -30,7 +32,9 @@ public class ProductResponse {
     private Double costPrice;
     private Double price;
     private Double discountPrice;
+    private LocalDateTime createTime;
     private List<OrderDetail> orderDetails;
+
 
     public ProductResponse(Product product) {
     }
