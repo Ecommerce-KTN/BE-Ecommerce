@@ -65,12 +65,16 @@ public class ProductService implements ProductInterface {
 
     @Override
     public List<ProductResponse> getAllProduct() {
-        return productRepository.findAll().stream().map(this::convertToResponse).collect(Collectors.toList());
+        return productRepository.findAllByOrderByCreatedTimeDesc()
+                .stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<ProductResponse> getProductById(String id) {
-        return Optional.ofNullable(productRepository.findById(id).map(this::convertToResponse).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND)));
+        return Optional.ofNullable(productRepository.findById(id).map(this::convertToResponse)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND)));
     }
 
     @Override
@@ -154,6 +158,7 @@ public class ProductService implements ProductInterface {
         ProductResponse response = new ProductResponse();
         BeanUtils.copyProperties(product, response);
         response.setCategoryId(product.getCategory().getId());
+        response.setCreateTime(product.getCreatedTime());
 //        response.setCostPrice(product.getCostPrices().get(0).getPrice());
 //        response.setPrice(product.getPrices().get(0).getPrice());
 //        response.setDiscountPrice(product.getDiscountPrices().get(0).getPrice());
