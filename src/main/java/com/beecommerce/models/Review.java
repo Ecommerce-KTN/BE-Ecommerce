@@ -24,7 +24,7 @@ public class Review {
      @Relationship(type = "RATED_BY", direction = Relationship.Direction.OUTGOING)
      private Customer customer;
 
-     @Relationship(type = "RATED_PRODUCT", direction = Relationship.Direction.OUTGOING)
+     @Relationship(type = "HAS_REVIEW", direction = Relationship.Direction.INCOMING)
      private Product product;
 
     @Override

@@ -45,7 +45,6 @@ public class Category {
                 ", image='" + image + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", createdTime=" + createdTime +
-                ", categories=" + (categories != null ? categories.stream().map(Category::getId).toList() : null) +
                 '}';
     }
 

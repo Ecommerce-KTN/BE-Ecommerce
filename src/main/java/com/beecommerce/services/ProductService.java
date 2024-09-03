@@ -38,8 +38,8 @@ public class ProductService implements ProductInterface {
 
     @Autowired
     private ProductRepository productRepository;
-    @Autowired
-    private ReviewRepository reviewRepository;
+//    @Autowired
+//    private ReviewRepository reviewRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -104,53 +104,15 @@ public class ProductService implements ProductInterface {
         }
     }
 
-
-//    public Product convertToEntity(ProductRequest productRequest) {
-//        Product product = new Product();
-//        BeanUtils.copyProperties(productRequest, product);
-//        return product;
-//    }
-
     private Product convertToEntity(ProductRequest productRequest) {
         Product product = new Product();
         BeanUtils.copyProperties(productRequest, product);
-        // Set Category by id
+        product.setCreatedTime(LocalDateTime.now());
         if (!StringUtils.isEmpty(productRequest.getCategoryId())) {
             Category category = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
             category.getProducts().add(product);
             product.setCategory(category);
         }
-
-//        // Set Cost Price
-//        if (productRequest.getCostPrice() != null) {
-//            CostPrice costPrice = new CostPrice();
-//            costPrice.setPrice(productRequest.getCostPrice());
-//            costPrice.setEffectiveDate(LocalDateTime.now());
-//            costPrice.setProduct(product);
-//            costPriceRepository.save(costPrice);
-//            product.setCostPrices(List.of(costPrice));
-//        }
-//
-//        // Set Prices
-//        if (productRequest.getPrice() != null) {
-//            Price price = new Price();
-//            price.setPrice(productRequest.getPrice());
-//            price.setEffectiveDate(LocalDateTime.now());
-//            price.setProduct(product);
-//            priceRepository.save(price);
-//            product.setPrices(List.of(price));
-//
-//        }
-//
-//        // Set Discount Prices
-//        if (productRequest.getDiscountPrice() != null) {
-//            DiscountPrice discountPrice = new DiscountPrice();
-//            discountPrice.setPrice(productRequest.getDiscountPrice());
-//            discountPrice.setEffectiveDate(LocalDateTime.now());
-//            discountPrice.setProduct(product);
-//            discountPriceRepository.save(discountPrice);
-//            product.setDiscountPrices(List.of(discountPrice));
-//        }
         return product;
     }
 
@@ -159,9 +121,9 @@ public class ProductService implements ProductInterface {
         BeanUtils.copyProperties(product, response);
         response.setCategoryId(product.getCategory().getId());
         response.setCreateTime(product.getCreatedTime());
-//        response.setCostPrice(product.getCostPrices().get(0).getPrice());
-//        response.setPrice(product.getPrices().get(0).getPrice());
-//        response.setDiscountPrice(product.getDiscountPrices().get(0).getPrice());
+        response.setCategoryName(product.getCategory().getName());
+        String parentCategoryName = categoryRepository.findById(product.getParentCategoryId()).get().getName();
+        response.setParentCategoryName(parentCategoryName);
         return response;
     }
 
@@ -169,21 +131,21 @@ public class ProductService implements ProductInterface {
         return productRepository.findByName(productName).isEmpty();
     }
 
-    public void addReviewToProduct(ReviewRequest reviewRequest) {
-        Product product = productRepository.findById(reviewRequest.getProductId()).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
-
-        Customer customer = customerRepository.findById(reviewRequest.getCustomerId()).orElseThrow(() -> new Exception(ErrorCode.CUSTOMER_NOT_FOUND));
-
-        Review review = new Review();
-        review.setProduct(product);
-        review.setCustomer(customer);
-        review.setRating(reviewRequest.getRating());
-        review.setComment(reviewRequest.getComment());
-        reviewRepository.save(review);
-
-        product.getReviews().add(review);
-        productRepository.save(product);
-
-        throw new Exception(SuccessCode.PRODUCT_ADD_REVIEW);
-    }
+//    public void addReviewToProduct(ReviewRequest reviewRequest) {
+//        Product product = productRepository.findById(reviewRequest.getProductId()).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+//
+//        Customer customer = customerRepository.findById(reviewRequest.getCustomerId()).orElseThrow(() -> new Exception(ErrorCode.CUSTOMER_NOT_FOUND));
+//
+//        Review review = new Review();
+//        review.setProduct(product);
+//        review.setCustomer(customer);
+//        review.setRating(reviewRequest.getRating());
+//        review.setComment(reviewRequest.getComment());
+//        reviewRepository.save(review);
+//
+//        product.getReviews().add(review);
+//        productRepository.save(product);
+//
+//        throw new Exception(SuccessCode.PRODUCT_ADD_REVIEW);
+//    }
 }

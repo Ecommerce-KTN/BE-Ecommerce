@@ -28,12 +28,14 @@ public class ProductResponse {
     private String unitOfMass;
     private String unitOfLength;
     private String parentCategoryId;
+    private String parentCategoryName;
     private String categoryId;
+    private String categoryName;
     private Double costPrice;
     private Double price;
     private Double discountPrice;
     private LocalDateTime createTime;
-    private List<OrderDetail> orderDetails;
+//    private List<OrderDetail> orderDetails;
 
 
     public ProductResponse(Product product) {

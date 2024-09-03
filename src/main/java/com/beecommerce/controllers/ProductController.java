@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
@@ -40,10 +40,10 @@ public class ProductController {
                     .message("Primary Image is required")
                     .build());
         }
-        if (productRequest.getPrimaryImage().getSize() > 100 * 1024 * 1024) {
+        if (productRequest.getPrimaryImage().getSize() > 10 * 1024 * 1024) {
             return ResponseEntity.badRequest().body(ApiResponse.builder()
                     .status(400)
-                    .message("Primary Image size must be less than 100MB")
+                    .message("Primary Image size must be less than 10MB")
                     .build());
         }
 
@@ -55,10 +55,10 @@ public class ProductController {
                     .build());
         }
         for (MultipartFile image : productRequest.getImages()) {
-            if (image.getSize() > 100 * 1024 * 1024) {
+            if (image.getSize() > 10 * 1024 * 1024) {
                 return ResponseEntity.badRequest().body(ApiResponse.builder()
                         .status(400)
-                        .message("Image size must be less than 100MB")
+                        .message("Image size must be less than 10MB")
                         .build());
             }
         }
@@ -146,11 +146,11 @@ public class ProductController {
         return ResponseEntity.ok(isUnique);
     }
 
-    @PostMapping("/add-review")
-    public ResponseEntity<String> addReviewToProduct(@RequestBody ReviewRequest reviewRequest) {
-        productService.addReviewToProduct(reviewRequest);
-        return ResponseEntity.status(SuccessCode.PRODUCT_ADD_REVIEW.getStatusCode())
-                .body(SuccessCode.PRODUCT_ADD_REVIEW.getMessage());
-    }
+//    @PostMapping("/add-review")
+//    public ResponseEntity<String> addReviewToProduct(@RequestBody ReviewRequest reviewRequest) {
+//        productService.addReviewToProduct(reviewRequest);
+//        return ResponseEntity.status(SuccessCode.PRODUCT_ADD_REVIEW.getStatusCode())
+//                .body(SuccessCode.PRODUCT_ADD_REVIEW.getMessage());
+//    }
 
 }

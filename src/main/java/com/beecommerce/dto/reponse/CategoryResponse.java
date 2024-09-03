@@ -19,6 +19,6 @@ public class CategoryResponse {
     private String image;
     private String parentId;
     private LocalDateTime createTime;
-    private List<Product> products;
-    private List<Category> categories;
+//    private List<Product> products;
+//    private List<Category> categories;
 }
