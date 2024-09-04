@@ -34,4 +34,29 @@ public class ProductRequest {
     private Double price;
     private Double discountPrice;
     private List<OrderDetail> orderDetails;
+
+    @Override
+    public String toString() {
+        return "ProductRequest{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", images=" + images +
+                ", primaryImage=" + primaryImage +
+                ", rating=" + rating +
+                ", sold=" + sold +
+                ", quantity=" + quantity +
+                ", sellingType='" + sellingType + '\'' +
+                ", weight=" + weight +
+                ", breadth=" + breadth +
+                ", width=" + width +
+                ", length=" + length +
+                ", unitOfMass='" + unitOfMass + '\'' +
+                ", unitOfLength='" + unitOfLength + '\'' +
+                ", parentCategoryId='" + parentCategoryId + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", costPrice=" + costPrice +
+                ", price=" + price +
+                ", discountPrice=" + discountPrice +
+                '}';
+    }
 }
