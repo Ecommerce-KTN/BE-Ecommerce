@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface ProductInterface {
     ProductResponse createProduct(ProductRequest product, String primaryImage, List<String> images);
-    Optional<ProductResponse> updateProduct(String id, ProductRequest product);
-    List<ProductResponse> getAllProduct();
-    Optional<ProductResponse> getProductById(String id);
+//    Optional<ProductResponse> updateProduct(String id, ProductRequest product);
+//    List<ProductResponse> getAllProduct();
+//    Optional<ProductResponse> getProductById(String id);
     void deleteProduct(String id);
 }

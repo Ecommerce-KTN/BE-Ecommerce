@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class CategoryService implements CategoryInterface {
         category.setName(categoryRequest.getName());
         category.setDescription(categoryRequest.getDescription());
         category.setImage(categoryRequest.getImage());
-        category.setCreatedTime(LocalDateTime.now());
+        category.setCreatedTime(new Date());
         Category savedCategory = categoryRepository.save(category);
         return convertToResponse(savedCategory);
     }
@@ -108,7 +109,7 @@ public class CategoryService implements CategoryInterface {
     public CategoryResponse convertToResponse(Category category) {
         CategoryResponse response = new CategoryResponse();
         BeanUtils.copyProperties(category, response);
-        response.setCreateTime(category.getCreatedTime());
+        response.setCreatedTime(new Date());
         return response;
     }
 

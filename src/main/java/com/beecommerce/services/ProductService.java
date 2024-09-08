@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,16 +26,10 @@ import java.util.stream.Collectors;
 public class ProductService implements ProductInterface {
 
     @Autowired
-    private CostPriceRepository costPriceRepository;
-
-    @Autowired
-    private PriceRepository priceRepository;
-
-    @Autowired
-    private DiscountPriceRepository discountPriceRepository;
-
-    @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -51,31 +46,33 @@ public class ProductService implements ProductInterface {
         product.setPrimaryImage(primaryImage);
         product.setImages(images);
         Product savedProduct = productRepository.save(product);
-        return convertToResponse(savedProduct);
+//        return convertToResponse(savedProduct);
+        return null;
     }
 
-    @Override
-    public Optional<ProductResponse> updateProduct(String id, ProductRequest productRequest) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
 
-        BeanUtils.copyProperties(productRequest, product, "id");
-        Product updatedProduct = productRepository.save(product);
-        return Optional.of(convertToResponse(updatedProduct));
-    }
+//    @Override
+//    public Optional<ProductResponse> updateProduct(String id, ProductRequest productRequest) {
+//        Product product = productRepository.findById(id).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+//
+//        BeanUtils.copyProperties(productRequest, product, "id");
+//        Product updatedProduct = productRepository.save(product);
+//        return Optional.of(convertToResponse(updatedProduct));
+//    }
 
-    @Override
-    public List<ProductResponse> getAllProduct() {
-        return productRepository.findAllByOrderByCreatedTimeDesc()
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<ProductResponse> getAllProduct() {
+//        return productRepository.findAllByOrderByCreatedTimeDesc()
+//                .stream()
+//                .map(this::convertToResponse)
+//                .collect(Collectors.toList());
+//    }
 
-    @Override
-    public Optional<ProductResponse> getProductById(String id) {
-        return Optional.ofNullable(productRepository.findById(id).map(this::convertToResponse)
-                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND)));
-    }
+//    @Override
+//    public Optional<ProductResponse> getProductById(String id) {
+//        return Optional.ofNullable(productRepository.findById(id).map(this::convertToResponse)
+//                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND)));
+//    }
 
     @Override
     public void deleteProduct(String id) {
@@ -94,38 +91,34 @@ public class ProductService implements ProductInterface {
         return Optional.empty();
     }
 
-    public String checkStockAvailability(String productId, int quantity) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
-        int currentStok = product.getOrderDetails().stream().filter(orderDetail -> orderDetail.getProduct().getId().equals(productId)).mapToInt(OrderDetail::getQuantity).sum();
-        if (currentStok >= quantity) {
-            return "Stock is sufficient.";
-        } else {
-            return "Insufficient stock available.";
-        }
-    }
+//    public String checkStockAvailability(String productId, int quantity) {
+//        Product product = productRepository.findById(productId).orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+//        int currentStok = product.getOrderDetails().stream().filter(orderDetail -> orderDetail.getProduct().getId().equals(productId)).mapToInt(OrderDetail::getQuantity).sum();
+//        if (currentStok >= quantity) {
+//            return "Stock is sufficient.";
+//        } else {
+//            return "Insufficient stock available.";
+//        }
+//    }
 
-    private Product convertToEntity(ProductRequest productRequest) {
+    private Product convertToEntity(ProductRequest productRequest) throws Exception {
         Product product = new Product();
         BeanUtils.copyProperties(productRequest, product);
-        product.setCreatedTime(LocalDateTime.now());
-        if (!StringUtils.isEmpty(productRequest.getCategoryId())) {
-            Category category = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
-            category.getProducts().add(product);
-            product.setCategory(category);
-        }
+        product.setCreatedTime(new Date());
+
         return product;
     }
 
-    public ProductResponse convertToResponse(Product product) {
-        ProductResponse response = new ProductResponse();
-        BeanUtils.copyProperties(product, response);
-        response.setCategoryId(product.getCategory().getId());
-        response.setCreateTime(product.getCreatedTime());
-        response.setCategoryName(product.getCategory().getName());
-        String parentCategoryName = categoryRepository.findById(product.getParentCategoryId()).get().getName();
-        response.setParentCategoryName(parentCategoryName);
-        return response;
-    }
+//    public ProductResponse convertToResponse(Product product) {
+//        ProductResponse response = new ProductResponse();
+//        BeanUtils.copyProperties(product, response);
+//        response.setCategoryId(product.getCategory().getId());
+//        response.setCreateTime(new Date());
+//        response.setCategoryName(product.getCategory().getName());
+//        String parentCategoryName = categoryRepository.findById(product.getParentCategoryId()).get().getName();
+//        response.setParentCategoryName(parentCategoryName);
+//        return response;
+//    }
 
     public boolean isProductNameUnique(String productName) {
         return productRepository.findByName(productName).isEmpty();

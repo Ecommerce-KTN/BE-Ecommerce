@@ -2,31 +2,28 @@ package com.beecommerce.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import jakarta.persistence.GeneratedValue;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Data
-@Getter
 @Setter
-@Document(collection = "categories")
+@Getter
 @ToString
-public class Category {
+@Document("product_types")
+public class ProductType {
     @Id
     private String id;
-    @NotBlank
-    private String name;
-    private String description;
-    private String image;
-    private String parentId;
+    private String parentCategoryId;
+    private String childCategoryId;
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
-    private List<Category> categories;
+    private String categoryId;
+    private List<String> productIds;
 }

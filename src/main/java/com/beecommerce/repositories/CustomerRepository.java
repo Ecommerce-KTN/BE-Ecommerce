@@ -1,7 +1,7 @@
 package com.beecommerce.repositories;
 
-import com.beecommerce.models.Customer;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import com.beecommerce.models.User;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CustomerRepository extends Neo4jRepository<Customer,String> {
+public interface CustomerRepository extends MongoRepository<User,String> {
 }

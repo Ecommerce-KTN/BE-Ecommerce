@@ -1,42 +1,27 @@
 package com.beecommerce.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import lombok.*;
-import org.springframework.data.neo4j.core.schema.*;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
-@Node
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "orders")
 @Getter
 @Setter
-
+@ToString
 public class Order {
     @Id
-    @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.OUTGOING)
-    private List<OrderDetail> orderDetails;
-    @Relationship(type = "HAS_ORDER", direction = Relationship.Direction.INCOMING)
-    private Customer customer;
+    private List<String> orderDetailIds;
+    private String userId;
     private String status;
-    private LocalDateTime orderDate;
+    @JsonSerialize(using = DateSerializer.class)
+    private Date createdAt;
     private String address;
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id='" + id + '\'' +
-                ", orderDetails=" + orderDetails +
-                ", customer=" + customer.getId() +
-                ", status='" + status + '\'' +
-                ", orderDate=" + orderDate +
-                ", address='" + address + '\'' +
-                '}';
-    }
-
 
 }

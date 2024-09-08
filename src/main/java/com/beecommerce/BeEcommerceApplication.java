@@ -1,23 +1,39 @@
 package com.beecommerce;
 
-import org.neo4j.cypherdsl.core.renderer.Configuration;
-import org.neo4j.cypherdsl.core.renderer.Dialect;
+import com.beecommerce.models.Product;
+import com.beecommerce.repositories.ProductRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EnableNeo4jRepositories
 public class BeEcommerceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BeEcommerceApplication.class, args);
 	}
-
 	@Bean
-	Configuration cypherDslConfiguration() {
-		return Configuration.newConfig()
-				.withDialect(Dialect.NEO4J_5).build();
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*");
+			}
+		};
 	}
+
+//	@Bean
+//    public CommandLineRunner commandLineRunner(ProductRepository productRepository) {
+//		return args -> {
+//			if (productRepository.findById("1").isEmpty()) {
+//				Product product = new Product("name");
+//				productRepository.save(product);
+//			}
+//		};
+//	}
 }
+

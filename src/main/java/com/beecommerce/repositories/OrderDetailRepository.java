@@ -1,7 +1,7 @@
 package com.beecommerce.repositories;
 
 import com.beecommerce.models.OrderDetail;
-import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface OrderDetailRepository extends Neo4jRepository<OrderDetail, String> {
+public interface OrderDetailRepository extends MongoRepository<OrderDetail, String> {
 }

@@ -5,13 +5,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Document(collection = "order_details")
 @Getter
 @Setter
-public class OrderDetail {
+@ToString
+@Document("product_colors")
+public class ProductColor {
     @Id
     private String id;
-    private String orderId;
     private String productId;
-    private int quantity;
+    private String color;
+    private String imageForColor;
 }

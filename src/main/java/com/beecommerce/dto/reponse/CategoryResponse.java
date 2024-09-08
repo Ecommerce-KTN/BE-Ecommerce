@@ -5,6 +5,7 @@ import com.beecommerce.models.Product;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class CategoryResponse {
     private String description;
     private String image;
     private String parentId;
-    private LocalDateTime createTime;
+    private Date createdTime;
 //    private List<Product> products;
 //    private List<Category> categories;
 }

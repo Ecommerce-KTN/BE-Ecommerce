@@ -1,38 +1,21 @@
 package com.beecommerce.models;
 
 import lombok.*;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Relationship;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Node
+@Document("reviews")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 public class Review {
     @Id
-    @GeneratedValue(UUIDStringGenerator.class)
     private String id;
     private Double rating;
     private String comment;
-
-     @Relationship(type = "RATED_BY", direction = Relationship.Direction.OUTGOING)
-     private Customer customer;
-
-     @Relationship(type = "HAS_REVIEW", direction = Relationship.Direction.INCOMING)
-     private Product product;
-
-    @Override
-    public String toString() {
-        return "Review{" +
-                "id='" + id + '\'' +
-                ", rating=" + rating +
-                ", comment='" + comment + '\'' +
-                '}';
-    }
+    private String productId;
+    private String userId;
 }
