@@ -42,7 +42,7 @@ public class ProductController {
         }
         if (productRequest.getPrimaryImage().getSize() > 10 * 1024 * 1024) {
             return ResponseEntity.badRequest().body(ApiResponse.builder()
-                    .status(401)
+                    .status(400)
                     .message("Primary Image size must be less than 10MB")
                     .build());
         }
@@ -50,14 +50,14 @@ public class ProductController {
         // Validate image list
         if (productRequest.getImages().size() > 10) {
             return ResponseEntity.badRequest().body(ApiResponse.builder()
-                    .status(402)
+                    .status(400)
                     .message("Number of images must be less than 10")
                     .build());
         }
         for (MultipartFile image : productRequest.getImages()) {
             if (image.getSize() > 10 * 1024 * 1024) {
                 return ResponseEntity.badRequest().body(ApiResponse.builder()
-                        .status(403)
+                        .status(400)
                         .message("Image size must be less than 10MB")
                         .build());
             }
@@ -73,7 +73,7 @@ public class ProductController {
                         imageUrl = s3Service.uploadFileToS3(image);
                     } catch (Exception e) {
                         return ResponseEntity.badRequest().body(ApiResponse.builder()
-                                .status(404)
+                                .status(400)
                                 .message(e.getMessage())
                                 .build());
                     }
@@ -89,7 +89,7 @@ public class ProductController {
             primaryImageUrl = s3Service.uploadFileToS3(productRequest.getPrimaryImage());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.builder()
-                    .status(405)
+                    .status(400)
                     .message(e.getMessage())
                     .build());
         }
@@ -97,7 +97,7 @@ public class ProductController {
         // Create product
         ProductResponse createdProduct = productService.createProduct(productRequest, primaryImageUrl, imageUrls);
         return ResponseEntity.badRequest().body(ApiResponse.builder()
-                .status(406)
+                .status(400)
                 .data(createdProduct)
                 .build());
     }

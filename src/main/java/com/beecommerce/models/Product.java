@@ -48,14 +48,6 @@ public class Product {
     @Relationship(type = "HAS_CATEGORY", direction = Relationship.Direction.OUTGOING)
     private Category category;
 
-//    @Relationship(type = "HAS_COST_PRICES", direction = Relationship.Direction.OUTGOING)
-//    private List<CostPrice> costPrices;
-//
-//    @Relationship(type = "HAS_PRICES", direction = Relationship.Direction.OUTGOING)
-//    private List<Price> prices;
-//
-//    @Relationship(type = "HAS_DISCOUNT_PRICES", direction = Relationship.Direction.OUTGOING)
-//    private List<DiscountPrice> discountPrices;
 
     @Relationship(type = "HAS_ORDER_DETAIL", direction = Relationship.Direction.INCOMING)
     private List<OrderDetail> orderDetails;

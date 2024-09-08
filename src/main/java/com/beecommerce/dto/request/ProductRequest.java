@@ -1,8 +1,5 @@
 package com.beecommerce.dto.request;
-import com.beecommerce.models.CostPrice;
-import com.beecommerce.models.DiscountPrice;
 import com.beecommerce.models.OrderDetail;
-import com.beecommerce.models.Price;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
