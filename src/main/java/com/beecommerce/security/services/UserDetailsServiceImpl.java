@@ -1,6 +1,7 @@
-package com.beecommerce.services;
+package com.beecommerce.security.services;
 
 import com.beecommerce.dto.request.RegisterRequest;
+import com.beecommerce.models.CustomUserDetails;
 import com.beecommerce.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -32,9 +33,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Username not found: " + username);
         }
-        return new User(
+        return new CustomUserDetails(
             user.getUsername(),
             user.getPassword(),
+            user.getId(),
             Collections.emptyList()
         );
     }
