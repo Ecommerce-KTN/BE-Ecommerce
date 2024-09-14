@@ -8,6 +8,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "order_details")
 @Getter
 @Setter
+@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetail {
     @Id
     private String id;

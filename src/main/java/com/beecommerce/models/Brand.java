@@ -4,15 +4,17 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Document("brands")
 @ToString
-@Document("product_colors")
-public class ProductColor {
+public class Brand {
     @Id
     private String id;
-    private String productId;
-    private String color;
-    private String imageForColor;
+    private String name;
+    private String description;
+    private String image;
 }

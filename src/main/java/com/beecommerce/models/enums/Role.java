@@ -1,4 +1,4 @@
-package com.beecommerce.models;
+package com.beecommerce.models.enums;
 
 public enum Role {
     ADMIN, USER;

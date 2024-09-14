@@ -1,5 +1,6 @@
 package com.beecommerce.models;
 
+import com.beecommerce.models.enums.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

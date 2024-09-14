@@ -1,5 +1,6 @@
 package com.beecommerce.models;
 
+import com.beecommerce.models.enums.ProductOption;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,8 @@ import java.util.List;
 @Setter
 @Document(collection = "categories")
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category {
     @Id
     private String id;
@@ -28,5 +31,10 @@ public class Category {
     private String parentId;
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
+    private boolean isFeatured;
+    private String banner;
+    private String icon;
+    private List<Product> featureProducts;
     private List<Category> categories;
+    private List<ProductOption> options;
 }
