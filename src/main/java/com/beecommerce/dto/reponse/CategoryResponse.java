@@ -1,25 +1,39 @@
 package com.beecommerce.dto.reponse;
 
-import com.beecommerce.models.Category;
 import com.beecommerce.models.Product;
+import com.beecommerce.models.enums.ProductOption;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CategoryResponse {
+
     private String id;
+
     private String name;
+
     private String description;
+
     private String image;
+
     private String parentId;
+
     private Date createdTime;
-//    private List<Product> products;
-//    private List<Category> categories;
+
+    private boolean isFeatured;
+
+    private String banner;
+
+    private String icon;
+
+    private List<CategoryResponse> categories;
+
+    private List<ProductOption> options;
 }

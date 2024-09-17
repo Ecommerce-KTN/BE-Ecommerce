@@ -1,7 +1,6 @@
 package com.beecommerce.services;
 
 import com.beecommerce.dto.reponse.CategoryResponse;
-import com.beecommerce.dto.reponse.ProductResponse;
 import com.beecommerce.dto.request.CategoryRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;

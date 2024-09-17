@@ -12,4 +12,5 @@ public class Specification {
     private String id;
     private String name;
     private String value;
+    private String categoryId;
 }
