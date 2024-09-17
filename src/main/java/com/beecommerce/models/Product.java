@@ -1,41 +1,41 @@
-package com.beecommerce.models;
-import com.beecommerce.models.enums.SellingType;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import java.util.Date;
-import java.util.List;
+    package com.beecommerce.models;
+    import com.beecommerce.models.enums.SellingType;
+    import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+    import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+    import jakarta.validation.constraints.NotBlank;
+    import jakarta.validation.constraints.Size;
+    import lombok.*;
+    import org.springframework.data.annotation.Id;
+    import org.springframework.data.mongodb.core.mapping.Document;
+    import java.util.Date;
+    import java.util.List;
 
-@Data
-@Document("products")
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-public class Product {
-    @Id
-    private String id;
-    @NotBlank(message = "Product name cannot be empty.")
-    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
-    private String name;
-    private String primaryImage;
-    private String Brand;
-    private List<String> images;
-    private SellingType sellingType;
-    private ProductShape shape;
-    private String description;
-    private Double basePrice;
-    private Double discountPrice;
-    private Double price;
-    @JsonSerialize(using = DateSerializer.class)
-    private Date createdTime;
-    private List<Category> categories;
-    private List<Specification> specifications;
-    private List<OptionValue> optionValues;
-    private List<ProductVariant> productVariants;
-}
+    @Data
+    @Document("products")
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    public class Product {
+        @Id
+        private String id;
+        @NotBlank(message = "Product name cannot be empty.")
+        @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
+        private String name;
+        private String primaryImage;
+        private String brand;
+        private List<String> images;
+        private SellingType sellingType;
+        private ProductShape shape;
+        private String description;
+        private Double basePrice;
+        private Double discountPrice;
+        private Double price;
+        @JsonSerialize(using = DateSerializer.class)
+        private Date createdTime;
+        private List<Category> categories;
+        private List<Specification> specifications;
+        private List<OptionValue> optionValues;
+        private List<ProductVariant> productVariants;
+    }

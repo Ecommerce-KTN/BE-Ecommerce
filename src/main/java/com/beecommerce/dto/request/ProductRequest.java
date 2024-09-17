@@ -1,61 +1,55 @@
 package com.beecommerce.dto.request;
 
-import com.beecommerce.dto.request.ProductColorRequest;
+import com.beecommerce.models.OptionValue;
+import com.beecommerce.models.ProductShape;
+import com.beecommerce.models.ProductVariant;
+import com.beecommerce.models.Specification;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
+import software.amazon.awssdk.services.lexmodelsv2.model.Specifications;
 
+import java.awt.*;
+import java.util.Date;
 import java.util.List;
-
 @Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProductRequest {
+
     @NotBlank(message = "Product name cannot be empty.")
     @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
 
-    private String productTypeId;
-
-    private List<ProductColorRequest> productColors;
-
-    private String size;
-
-    @NotNull(message = "Quantity cannot be null.")
-    private Integer quantity;
-
     private String primaryImage;
+
+    private String brand;
 
     private List<String> images;
 
-    @NotNull(message = "Cost price cannot be null.")
-    private Double costPrice;
-
-    @NotNull(message = "Price cannot be null.")
-    private Double price;
-
-    private Double discount;
-
-    private String SKU;
-
     private String sellingType;
 
-    private String unitOfMass;
-
-    private String unitOfLength;
-
-    private Double weight;
-
-    private Double breadth;
-
-    private Double width;
-
-    private Double length;
-
-    private Boolean status;
+    private ProductShape shape;
 
     private String description;
 
-    private String categoryId;
+    private Double basePrice;
 
-    private List<String> reviewIds;
+    private Double discountPrice;
+
+    private Double price;
+
+    private Date createdTime;
+
+    private List<CategoryRequest> categories;
+
+    private List<Specification> specifications;
+
+    private List<OptionValue> optionValues;
+
+    private List<ProductVariant> productVariants;
+
 }
