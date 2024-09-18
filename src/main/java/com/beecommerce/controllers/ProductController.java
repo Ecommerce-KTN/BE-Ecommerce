@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.beecommerce.exception.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -104,6 +105,74 @@ public class ProductController {
                             .build());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest) {
+        try {
+            Optional<Product> updatedProduct = productService.updateProduct(id, productRequest);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message(SuccessCode.PRODUCT_UPDATED.getMessage())
+                    .data(ProductMapper.INSTANCE.convertToResponse(updatedProduct.get()))
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(e.getMessage())
+                            .build());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String id) {
+        try {
+            Product product = productService.getProductById(id);
+            if (product == null) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
+                                .build());
+            }
+
+            productService.deleteProduct(id);
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message(SuccessCode.PRODUCT_DELETED.getMessage())
+                    .build());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+
+
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<ApiResponse> getLatest20Products() {
+        try {
+            List<Product> products = productService.getLatest20Products();
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(products)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .build());
+        }
+    }
+
+
+
 
 
 }

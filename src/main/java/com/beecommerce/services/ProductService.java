@@ -40,4 +40,28 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+    public Optional<Product> updateProduct(String id, ProductRequest productRequest) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+
+        BeanUtils.copyProperties(productRequest, existingProduct, "id");
+
+        Product updatedProduct = productRepository.save(existingProduct);
+
+        return Optional.of(updatedProduct);
+    }
+
+    public void deleteProduct(String id) {
+        productRepository.deleteById(id);
+    }
+
+    public List<Product> getLatest20Products() {
+        return productRepository.findAll().stream()
+                .sorted((p1, p2) -> p2.getCreatedTime().compareTo(p1.getCreatedTime()))
+                .limit(20)
+                .collect(Collectors.toList());
+    }
+
+
 }

@@ -21,6 +21,8 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+
 public class Category {
     @Id
     private String id;
