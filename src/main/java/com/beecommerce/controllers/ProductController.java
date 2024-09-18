@@ -16,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.beecommerce.exception.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/products")
@@ -36,12 +37,72 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductRequest request) {
-        Product product = ProductMapper.INSTANCE.convertToEntity(request);
+        try {
+            Product product = productService.createProduct(ProductMapper.INSTANCE.convertToEntity(request));
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Product created successfully")
+                    .data(ProductMapper.INSTANCE.convertToResponse(product))
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.PRODUCT_ALREADY_EXISTS.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.PRODUCT_ALREADY_EXISTS.getMessage())
+                            .build());
+        }
+    }
 
-        product = productService.createProduct(product);
 
-        return ResponseEntity.ok(ApiResponse.builder().success(true).message("Product created successfully").data(ProductMapper.INSTANCE.convertToResponse(product)).build());
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllProducts() {
+        try {
+            List<Product> products = productService.getAllProducts();
+            if (products.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
+                                .build());
+            }
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Products retrieved successfully")
+                    .data(products)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
 
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getProductById(@PathVariable String id) {
+        try {
+            Product product = productService.getProductById(id);
+            if (product == null) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
+                                .build());
+            }
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(product)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
     }
 
 

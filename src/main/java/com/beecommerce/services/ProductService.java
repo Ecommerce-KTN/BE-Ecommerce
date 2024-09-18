@@ -31,4 +31,13 @@ public class ProductService {
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    public Product getProductById(String id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new Exception(ErrorCode.PRODUCT_NOT_FOUND));
+    }
 }
