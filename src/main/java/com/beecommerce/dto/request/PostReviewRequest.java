@@ -2,9 +2,8 @@ package com.beecommerce.dto.request;
 import lombok.Data;
 
 @Data
-public class ReviewRequest {
+public class PostReviewRequest {
     private String productId;
-    private String customerId;
     private Double rating;
     private String comment;
 }

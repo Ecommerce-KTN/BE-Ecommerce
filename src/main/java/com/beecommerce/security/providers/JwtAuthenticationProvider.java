@@ -1,7 +1,7 @@
 package com.beecommerce.security.providers;
 
 import com.beecommerce.security.tokens.JwtAuthenticationToken;
-import com.beecommerce.security.utils.JwtUtil;
+import com.beecommerce.utils.JwtUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

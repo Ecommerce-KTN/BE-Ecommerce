@@ -10,32 +10,35 @@
     import java.util.Date;
     import java.util.List;
 
-    @Data
-    @Document("products")
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    @ToString
-    @NoArgsConstructor
-    public class Product {
-        @Id
-        private String id;
-        @NotBlank(message = "Product name cannot be empty.")
-        @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
-        private String name;
-        private String primaryImage;
-        private String brand;
-        private List<String> images;
-        private SellingType sellingType;
-        private ProductShape shape;
-        private String description;
-        private Double basePrice;
-        private Double discountPrice;
-        private Double price;
-        @JsonSerialize(using = DateSerializer.class)
-        private Date createdTime;
-        private List<Category> categories;
-        private List<Specification> specifications;
-        private List<OptionValue> optionValues;
-        private List<ProductVariant> productVariants;
-    }
+@Data
+@Document("products")
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class Product {
+    @Id
+    private String id;
+    @NotBlank(message = "Product name cannot be empty.")
+    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
+    private String name;
+    private String primaryImage;
+    private String Brand;
+    private List<String> images;
+    private SellingType sellingType;
+    private ProductShape shape;
+    private String description;
+    private Double basePrice;
+    private Double discountPrice;
+    private Double price;
+    @JsonSerialize(using = DateSerializer.class)
+    private Date createdTime;
+    private List<Category> categories;
+    private List<Specification> specifications;
+    private List<OptionValue> optionValues;
+    private List<ProductVariant> productVariants;
+
+    private Long reviewCount;
+    private Double avgRating;
+}
