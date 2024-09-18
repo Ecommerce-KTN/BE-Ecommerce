@@ -5,7 +5,7 @@ import com.beecommerce.security.CustomAuthenticationEntryPoint;
 import com.beecommerce.security.filters.JwtRequestFilter;
 import com.beecommerce.security.providers.CustomDaoAuthenticationProvider;
 import com.beecommerce.security.providers.JwtAuthenticationProvider;
-import com.beecommerce.security.utils.JwtUtil;
+import com.beecommerce.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Value("${jwt.access-token.expiration}")
     private long jwtAccessTokenExpirationMs;
 
-    @Value("${jwt.access-token.expiration}")
+    @Value("${jwt.refresh-token.expiration}")
     private long jwtRefreshTokenExpirationMs;
 
     @Value("${jwt.issuer}")

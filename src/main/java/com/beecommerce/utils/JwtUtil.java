@@ -1,4 +1,4 @@
-package com.beecommerce.security.utils;
+package com.beecommerce.utils;
 
 
 import io.jsonwebtoken.*;
@@ -79,6 +79,11 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
+    }
+
+    public String getUserId(String token) {
+        Claims claims = parseToken(token);
+        return claims.get("user_id", String.class);
     }
 
     // Verify and parse token

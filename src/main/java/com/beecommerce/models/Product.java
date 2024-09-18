@@ -38,4 +38,7 @@ public class Product {
     private List<Specification> specifications;
     private List<OptionValue> optionValues;
     private List<ProductVariant> productVariants;
+
+    private Long reviewCount;
+    private Double avgRating;
 }

@@ -3,7 +3,7 @@ package com.beecommerce.services;
 import com.beecommerce.models.RefreshToken;
 import com.beecommerce.repositories.RefreshTokenRepository;
 import com.beecommerce.security.tokens.IdUsernamePasswordAuthenticationToken;
-import com.beecommerce.security.utils.JwtUtil;
+import com.beecommerce.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class TokenService {
