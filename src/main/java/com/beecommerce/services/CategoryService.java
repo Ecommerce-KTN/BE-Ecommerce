@@ -6,6 +6,7 @@ import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
 import com.beecommerce.exception.SuccessCode;
 import com.beecommerce.models.Category;
+import com.beecommerce.models.Product;
 import com.beecommerce.repositories.CategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,97 +20,40 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryService implements CategoryInterface {
-
     @Autowired
     private CategoryRepository categoryRepository;
-    @Override
-    public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAllByOrderByCreatedTimeDesc()
-                .stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
     }
 
-    @Override
-    public Optional<CategoryResponse> getCategoryById(String id) {
-        return Optional.ofNullable(categoryRepository.findById(id)
-                .map(this::convertToResponse)
-                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND)));
-    }
-    @Override
-    public CategoryResponse createCategory(CategoryRequest categoryRequest) {
-        Category category = new Category();
-        category.setName(categoryRequest.getName());
-        category.setDescription(categoryRequest.getDescription());
-        category.setImage(categoryRequest.getImage());
-        category.setCreatedTime(new Date());
-        Category savedCategory = categoryRepository.save(category);
-        return convertToResponse(savedCategory);
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 
-    @Override
-    public Optional<CategoryResponse> updateCategory(String id, CategoryRequest categoryRequest) {
+
+    public Category getCategoryById(String id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    public Optional<Category> updateCategory(String id, CategoryRequest categoryRequest) {
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new Exception(SuccessCode.CATEGORY_UPDATED));
+                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
 
-        existingCategory.setName(categoryRequest.getName());
-        existingCategory.setDescription(categoryRequest.getDescription());
-        existingCategory.setImage(categoryRequest.getImage());
+        BeanUtils.copyProperties(categoryRequest, existingCategory, "id");
+
         Category updatedCategory = categoryRepository.save(existingCategory);
-        return Optional.of(convertToResponse(updatedCategory));
+
+        return Optional.of(updatedCategory);
     }
-        @Override
+
     public void deleteCategory(String id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+
         categoryRepository.delete(category);
-    }
-
-    @Override
-    public List<CategoryResponse> getParentCategories() {
-        List<Category> categories = categoryRepository.findByParentIdIsNull();
-        if (categories.isEmpty()){
-            throw new Exception(ErrorCode.CATEGORY_NOT_FOUND);
-        }
-        return categories.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CategoryResponse> getCategoriesByParentId(String parentId) {
-        List<Category> categories = categoryRepository.findByParentId(parentId);
-        if (categories.isEmpty()){
-            throw new Exception(ErrorCode.CATEGORY_NOT_FOUND);
-        }
-        return categories.stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public CategoryResponse createChildCategory(String parentId, CategoryRequest categoryRequest) {
-        Category parentCategory = categoryRepository.findById(parentId)
-                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
-        Category category = convertToEntity(categoryRequest);
-        category.setParentId(parentId);
-        Category savedCategory = categoryRepository.save(category);
-        parentCategory.getCategories().add(savedCategory);
-        categoryRepository.save(parentCategory);
-        return convertToResponse(savedCategory);
-    }
-
-
-    public Category convertToEntity(CategoryRequest categoryRequest) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryRequest, category);
-        return category;
-    }
-    public CategoryResponse convertToResponse(Category category) {
-        CategoryResponse response = new CategoryResponse();
-        BeanUtils.copyProperties(category, response);
-        response.setCreatedTime(new Date());
-        return response;
     }
 
 
