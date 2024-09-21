@@ -1,6 +1,7 @@
 package com.beecommerce.repositories;
 
 import com.beecommerce.models.Product;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 //    get
 //    Product createProduct(Product product);
     List<Product> findByCategories_Id(String categoryId);
+    List<Product> findTop20ByOrderByProductVariants_SoldDesc(PageRequest pageRequest);
 }

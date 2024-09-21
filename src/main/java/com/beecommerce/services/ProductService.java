@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -65,6 +66,10 @@ public class ProductService {
 
     public List<Product> getProductsByCategory(String categoryId) {
         return productRepository.findByCategories_Id(categoryId);
+    }
+
+    public List<Product> getTopSellingProducts() {
+        return productRepository.findTop20ByOrderByProductVariants_SoldDesc(PageRequest.of(0, 20));
     }
 
 

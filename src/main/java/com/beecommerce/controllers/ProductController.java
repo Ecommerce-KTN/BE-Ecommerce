@@ -194,7 +194,28 @@ public class ProductController {
         }
     }
 
-
-
+    @GetMapping("/top-selling")
+    public ResponseEntity<ApiResponse> getTopSellingProducts() {
+        try {
+            List<Product> products = productService.getTopSellingProducts();
+            if (products.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message("No products found")
+                                .build());
+            }
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(products)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
 
 }
