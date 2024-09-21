@@ -63,5 +63,9 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public List<Product> getProductsByCategory(String categoryId) {
+        return productRepository.findByCategories_Id(categoryId);
+    }
+
 
 }

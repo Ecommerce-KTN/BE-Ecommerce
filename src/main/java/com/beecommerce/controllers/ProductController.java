@@ -171,6 +171,28 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String categoryId) {
+        try {
+            List<Product> products = productService.getProductsByCategory(categoryId);
+            if (products.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .build());
+            }
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(products)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
 
 
 
