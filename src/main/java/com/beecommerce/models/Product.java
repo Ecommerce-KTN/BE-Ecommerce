@@ -24,7 +24,8 @@ public class Product {
     @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
     private String primaryImage;
-    private String Brand;
+    private String brand;
+    private String shop;
     private List<String> images;
     private SellingType sellingType;
     private ProductShape shape;
@@ -38,7 +39,6 @@ public class Product {
     private List<Specification> specifications;
     private List<OptionValue> optionValues;
     private List<ProductVariant> productVariants;
-
     private Long reviewCount;
     private Double avgRating;
 }

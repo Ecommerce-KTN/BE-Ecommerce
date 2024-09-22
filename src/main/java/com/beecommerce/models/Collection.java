@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-@Document(collection = "categories")
+@Document(collection = "collections")
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,14 +25,10 @@ public class Collection {
 
     private String banner;
 
-    private String brand;
-
-    private List<Product> products;
+    private String shop;
 
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
-
     private boolean isFeatured;
-
     private boolean isPaidForHomeLanding;
 }

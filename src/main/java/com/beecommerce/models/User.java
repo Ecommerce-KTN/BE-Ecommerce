@@ -27,5 +27,6 @@ public class User {
     private boolean sex;
     private String avatar;
     private Role role;
+    private String shop;
     private List<String> favoriteProducts;
 }

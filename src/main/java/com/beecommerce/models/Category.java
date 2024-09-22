@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -35,5 +36,17 @@ public class Category {
     private Date createdTime;
     private String banner;
     private String icon;
-    private List<ProductOption> options;
+    @Field("options")
+    private List<String> optionValues;
+    public List<ProductOption> getOptions() {
+        return optionValues.stream()
+                .map(ProductOption::fromValue)
+                .toList();
+    }
+
+    public void setOptions(List<ProductOption> options) {
+        this.optionValues = options.stream()
+                .map(ProductOption::getValue)
+                .toList();
+    }
 }
