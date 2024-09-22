@@ -86,5 +86,13 @@ public class ProductService {
         return productRepository.findTop20ByOrderByProductVariants_SoldDesc(PageRequest.of(0, 20));
     }
 
+    public List<Specification> getSpecificationsByCategoryId(String categoryId) {
+        List<Product> products = productRepository.findByCategories_Id(categoryId);
+
+        return products.stream()
+                .flatMap(product -> product.getSpecifications().stream())
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
 }

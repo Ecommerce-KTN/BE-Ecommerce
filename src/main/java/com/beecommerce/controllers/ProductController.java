@@ -8,6 +8,7 @@ import com.beecommerce.exception.Exception;
 import com.beecommerce.exception.SuccessCode;
 import com.beecommerce.mapper.ProductMapper;
 import com.beecommerce.models.Product;
+import com.beecommerce.models.Specification;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.S3Service;
@@ -218,6 +219,12 @@ public class ProductController {
                             .message(ErrorCode.DATABASE_ERROR.getMessage())
                             .build());
         }
+    }
+
+    @GetMapping("/specifications")
+    public ResponseEntity<List<Specification>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
+        List<Specification> specifications = productService.getSpecificationsByCategoryId(categoryId);
+        return ResponseEntity.ok(specifications);
     }
 
 }
