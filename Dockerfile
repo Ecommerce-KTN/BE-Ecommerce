@@ -1,11 +1,10 @@
 # Sử dụng base image với JDK 21
-FROM eclipse-temurin:21-jdk
+FROM eclipse-temurin:21-jdk AS build
 
 # Đặt biến môi trường để không hỏi trong Gradle
 ENV GRADLE_OPTS "-Dorg.gradle.daemon=false"
 
 # Cài đặt Gradle bằng cách sử dụng hình ảnh Gradle chính thức
-# Sử dụng gradle wrapper có trong project để đảm bảo phiên bản phù hợp
 COPY gradlew /app/gradlew
 COPY gradle /app/gradle
 
@@ -24,10 +23,14 @@ RUN ./gradlew --no-daemon dependencies
 # Build ứng dụng
 RUN ./gradlew --no-daemon build
 
+# Tạo image cuối cùng
+FROM eclipse-temurin:21-jdk
+
+# Sao chép file jar đã build từ stage trước
+COPY --from=build /app/build/libs/BE-Ecommerce-0.0.1-SNAPSHOT.jar app.jar
+
 # Expose port nếu cần chạy ứng dụng
 EXPOSE 8080
 
-COPY --from=build /app/build/libs/BE-Ecommerce-0.0.1-SNAPSHOT.jar app.jar
-
-# Chạy ứng dụng sau khi build (tùy thuộc vào ứng dụng của bạn)
+# Chạy ứng dụng sau khi build
 CMD ["java", "-jar", "app.jar"]
