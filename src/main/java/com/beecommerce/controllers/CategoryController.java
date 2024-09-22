@@ -9,6 +9,7 @@ import com.beecommerce.models.Category;
 import com.beecommerce.models.Product;
 import com.beecommerce.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.beecommerce.mapper.CategoryMapper;
@@ -110,6 +111,12 @@ public class CategoryController {
                             .message(e.getMessage())
                             .build());
         }
+    }
+
+    @PostMapping("/parent/{parentCategoryId}")
+    public ResponseEntity<Category> createSubCategory(@PathVariable String parentCategoryId, @RequestBody CategoryRequest categoryRequest) {
+        Category subCategory = categoryService.createSubCategory(parentCategoryId, categoryRequest);
+        return new ResponseEntity<>(subCategory, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

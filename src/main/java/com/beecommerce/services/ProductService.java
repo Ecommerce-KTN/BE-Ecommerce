@@ -28,9 +28,23 @@ public class ProductService {
     @Autowired
     private  ProductRepository productRepository;
 
-
     public Product createProduct(Product product) {
+        if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
+            for (ProductVariant variant : product.getProductVariants()) {
+                String sku = generateSku(product.getBrand(), variant.getValue(), variant.getPrice(), variant.getQuantity());
+                variant.setSKU(sku);
+            }
+        }
         return productRepository.save(product);
+    }
+
+    private String generateSku(String brand, String variantValue, Double price, long quantity) {
+        String formattedBrand = brand.substring(0, 3).toUpperCase();
+        String formattedValue = variantValue.replaceAll(" ", "").toUpperCase();
+        String formattedPrice = String.valueOf(price.intValue());
+        String formattedQuantity = String.valueOf(quantity);
+
+        return String.format("%s-%s-%s-%s", formattedBrand, formattedValue, formattedPrice, formattedQuantity);
     }
 
     public List<Product> getAllProducts() {

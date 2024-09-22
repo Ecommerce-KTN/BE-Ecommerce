@@ -39,17 +39,19 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductRequest request) {
         try {
-            Product product = productService.createProduct(ProductMapper.INSTANCE.convertToEntity(request));
+            Product product = ProductMapper.INSTANCE.convertToEntity(request);
+
+            product = productService.createProduct(product);
+
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
-                    .message("Product created successfully")
                     .data(ProductMapper.INSTANCE.convertToResponse(product))
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.PRODUCT_ALREADY_EXISTS.getStatusCode())
                     .body(ApiResponse.builder()
                             .success(false)
-                            .message(ErrorCode.PRODUCT_ALREADY_EXISTS.getMessage())
+                            .message("Error creating product: " + e.getMessage())
                             .build());
         }
     }
