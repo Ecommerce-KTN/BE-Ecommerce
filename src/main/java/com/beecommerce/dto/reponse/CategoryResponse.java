@@ -27,13 +27,9 @@ public class CategoryResponse {
 
     private Date createdTime;
 
-    private boolean isFeatured;
-
     private String banner;
 
     private String icon;
-
-    private List<CategoryResponse> categories;
 
     private List<ProductOption> options;
 }

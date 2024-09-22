@@ -10,6 +10,11 @@ import org.mapstruct.factory.Mappers;
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdTime", ignore = true)
+    @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "reviewCount", ignore = true)
+    @Mapping(target = "avgRating", ignore = true)
     Product convertToEntity(ProductRequest request);
 
     ProductRequest convertToResponse(Product product);

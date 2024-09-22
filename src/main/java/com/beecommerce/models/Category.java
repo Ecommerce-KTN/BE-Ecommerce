@@ -33,10 +33,7 @@ public class Category {
     private String parentId;
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
-    private boolean isFeatured;
     private String banner;
     private String icon;
-    private List<Product> featureProducts;
-    private List<Category> categories;
     private List<ProductOption> options;
 }

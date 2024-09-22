@@ -11,7 +11,8 @@ import org.mapstruct.factory.Mappers;
 public interface ReviewMapper {
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "userId", source = "userId")
+            @Mapping(target = "createdAt", ignore = true)
     })
+
     Review postReviewDtoToReview(PostReviewRequest dto, String userId);
 }

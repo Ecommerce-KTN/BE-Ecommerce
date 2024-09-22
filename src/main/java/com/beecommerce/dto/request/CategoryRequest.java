@@ -30,10 +30,5 @@ public class CategoryRequest {
     private String banner;
 
     private String icon;
-
-    private List<String> featureProductIds; // Chỉ lưu ID của các Product
-
-    private List<String> categoryIds; // Chỉ lưu ID của các Category con
-
-    private List<String> optionIds; // Chỉ lưu ID của các ProductOption
+    private List<String> options;
 }
