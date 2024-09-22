@@ -27,5 +27,7 @@ RUN ./gradlew --no-daemon build
 # Expose port nếu cần chạy ứng dụng
 EXPOSE 8080
 
+COPY --from=build /app/build/libs/BE-Ecommerce-0.0.1-SNAPSHOT.jar app.jar
+
 # Chạy ứng dụng sau khi build (tùy thuộc vào ứng dụng của bạn)
-CMD ["java", "-jar", "build/libs/your-app.jar"]
+CMD ["java", "-jar", "app.jar"]
