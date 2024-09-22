@@ -15,7 +15,10 @@ public enum ErrorCode {
     DATABASE_ERROR(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
     DUPLICATE_PRODUCT_ID(409, "Duplicate product ID", HttpStatus.CONFLICT),
     CUSTOMER_NOT_FOUND(404, "Customer not found", HttpStatus.NOT_FOUND),
-    PRODUCT_TYPE_NOT_FOUND(404, "Product type not found", HttpStatus.NOT_FOUND);
+    PRODUCT_TYPE_NOT_FOUND(404, "Product type not found", HttpStatus.NOT_FOUND),
+    COLLECTION_NOT_FOUND(404, "Collection not found", HttpStatus.NOT_FOUND);
+
+
     private final int code;
     private final String message;
     private final HttpStatus statusCode;
