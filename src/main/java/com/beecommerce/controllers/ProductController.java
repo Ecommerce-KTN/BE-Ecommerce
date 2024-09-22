@@ -9,6 +9,7 @@ import com.beecommerce.models.Product;
 import com.beecommerce.dto.reponse.PaginatedResource;
 import com.beecommerce.dto.request.GetProductReviewsRequest;
 import com.beecommerce.models.Review;
+import com.beecommerce.models.Specification;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.ReviewService;
@@ -44,17 +45,19 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductRequest request) {
         try {
-            Product product = productService.createProduct(ProductMapper.INSTANCE.convertToEntity(request));
+            Product product = ProductMapper.INSTANCE.convertToEntity(request);
+
+            product = productService.createProduct(product);
+
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
-                    .message("Product created successfully")
                     .data(ProductMapper.INSTANCE.convertToResponse(product))
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.PRODUCT_ALREADY_EXISTS.getStatusCode())
                     .body(ApiResponse.builder()
                             .success(false)
-                            .message(ErrorCode.PRODUCT_ALREADY_EXISTS.getMessage())
+                            .message("Error creating product: " + e.getMessage())
                             .build());
         }
     }
@@ -234,4 +237,10 @@ public class ProductController {
         PaginatedResource<Review> result = reviewService.getProductReviewsPaginated(productId, dto, pageable);
         return new ResponseEntity<>(new ApiResponse<Object>(result, "Success", HttpStatus.OK.value(), true, null), HttpStatus.OK);
     }
+    @GetMapping("/specifications")
+    public ResponseEntity<List<Specification>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
+        List<Specification> specifications = productService.getSpecificationsByCategoryId(categoryId);
+        return ResponseEntity.ok(specifications);
+    }
+
 }

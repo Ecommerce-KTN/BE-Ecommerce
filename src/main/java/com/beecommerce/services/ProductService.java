@@ -22,11 +22,23 @@ public class ProductService {
     @Autowired
     private  ProductRepository productRepository;
 
-//    @Autowired
-//    private ProductTypeRepository productTypeRepository;
-
     public Product createProduct(Product product) {
+        if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
+            for (ProductVariant variant : product.getProductVariants()) {
+                String sku = generateSku(product.getBrand(), variant.getValue(), variant.getPrice(), variant.getQuantity());
+                variant.setSKU(sku);
+            }
+        }
         return productRepository.save(product);
+    }
+
+    private String generateSku(String brand, String variantValue, Double price, long quantity) {
+        String formattedBrand = brand.substring(0, 3).toUpperCase();
+        String formattedValue = variantValue.replaceAll(" ", "").toUpperCase();
+        String formattedPrice = String.valueOf(price.intValue());
+        String formattedQuantity = String.valueOf(quantity);
+
+        return String.format("%s-%s-%s-%s", formattedBrand, formattedValue, formattedPrice, formattedQuantity);
     }
 
     public List<Product> getAllProducts() {
@@ -68,5 +80,13 @@ public class ProductService {
         return productRepository.findTop20ByOrderByProductVariants_SoldDesc(PageRequest.of(0, 20));
     }
 
+    public List<Specification> getSpecificationsByCategoryId(String categoryId) {
+        List<Product> products = productRepository.findByCategories_Id(categoryId);
+
+        return products.stream()
+                .flatMap(product -> product.getSpecifications().stream())
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
 }

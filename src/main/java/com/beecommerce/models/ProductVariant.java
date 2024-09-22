@@ -26,5 +26,4 @@ public class ProductVariant {
     private List<Review> reviews;
     private Double rating;
     private List<String> optionValueIds;
-
 }

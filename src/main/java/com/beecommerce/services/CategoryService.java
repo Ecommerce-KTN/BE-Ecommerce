@@ -56,5 +56,17 @@ public class CategoryService implements CategoryInterface {
         categoryRepository.delete(category);
     }
 
+    public Category createSubCategory(String parentCategoryId, CategoryRequest subCategoryRequest) {
+        Category parentCategory = categoryRepository.findById(parentCategoryId)
+                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+
+        Category subCategory = new Category();
+        BeanUtils.copyProperties(subCategoryRequest, subCategory); // Copy dữ liệu từ request sang entity
+        subCategory.setParentId(parentCategoryId); // Gán parentId để chỉ định category cha
+        subCategory.setCreatedTime(new Date()); // Đặt thời gian tạo
+
+        return categoryRepository.save(subCategory);
+    }
+
 
 }
