@@ -41,4 +41,5 @@ public class Product {
     private List<ProductVariant> productVariants;
     private Long reviewCount;
     private Double avgRating;
+
 }

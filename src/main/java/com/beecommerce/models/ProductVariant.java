@@ -25,5 +25,5 @@ public class ProductVariant {
     private long view;
     private List<Review> reviews;
     private Double rating;
-    private List<String> optionValueIds;
+    private List<OptionValue> optionValue;
 }

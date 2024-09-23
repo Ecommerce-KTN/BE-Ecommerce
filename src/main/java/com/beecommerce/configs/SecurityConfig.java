@@ -96,7 +96,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/refresh-token").permitAll()
+                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/categories", "/api/v1/auth/refresh-token").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> {
