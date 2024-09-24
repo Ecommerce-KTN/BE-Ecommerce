@@ -7,6 +7,7 @@ import com.beecommerce.models.Specification;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.lexmodelsv2.model.Specifications;
 
 import java.awt.*;
@@ -24,11 +25,11 @@ public class ProductRequest {
     @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
 
-    private String primaryImage;
+    private MultipartFile primaryImage;
 
     private String brand;
 
-    private List<String> images;
+    private List<MultipartFile> images;
 
     private String sellingType;
 

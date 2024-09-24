@@ -2,9 +2,12 @@ package com.beecommerce.dto.response;
 
 import com.beecommerce.dto.reponse.CategoryResponse;
 import com.beecommerce.models.OptionValue;
+import com.beecommerce.models.ProductShape;
 import com.beecommerce.models.ProductVariant;
 import com.beecommerce.models.Specification;
 import lombok.*;
+
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class ProductResponse {
 
     private String sellingType;
 
-    private String shape;
+    private ProductShape shape;
 
     private String description;
 

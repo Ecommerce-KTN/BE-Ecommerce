@@ -23,6 +23,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,12 +47,72 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductRequest request) {
+    public ResponseEntity<ApiResponse> createProduct(@ModelAttribute ProductRequest request) {
         try {
             Product product = ProductMapper.INSTANCE.convertToEntity(request);
+            if (request.getPrimaryImage().isEmpty()) {
+                return ResponseEntity.badRequest().body(ApiResponse.builder()
+                        .status(400)
+                        .message("Primary Image is required")
+                        .build());
+            }
+            if (request.getPrimaryImage().getSize() > 100 * 1024 * 1024) {
+                return ResponseEntity.badRequest().body(ApiResponse.builder()
+                        .status(400)
+                        .message("Primary Image size must be less than 10MB")
+                        .build());
+            }
 
+            // Validate image list
+            if (request.getImages().size() > 10) {
+                return ResponseEntity.badRequest().body(ApiResponse.builder()
+                        .status(400)
+                        .message("Number of images must be less than 10")
+                        .build());
+            }
+            for (MultipartFile image : request.getImages()) {
+                if (image.getSize() > 100 * 1024 * 1024) {
+                    return ResponseEntity.badRequest().body(ApiResponse.builder()
+                            .status(400)
+                            .message("Image size must be less than 10MB")
+                            .build());
+                }
+            }
+
+            // Upload images to S3
+            List<String> imageUrls = new ArrayList<>();
+            if(request.getImages().size() >0) {
+                for (MultipartFile image : request.getImages()) {
+                    if(!image.isEmpty() ){
+                        String imageUrl;
+                        try {
+                            imageUrl = s3Service.uploadFileToS3(image);
+                        } catch (Exception e) {
+                            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                                    .status(400)
+                                    .message(e.getMessage())
+                                    .build());
+                        }
+                        imageUrls.add(imageUrl);
+                    }
+
+                }
+            }
+
+
+            String primaryImageUrl;
+            try {
+                primaryImageUrl = s3Service.uploadFileToS3(request.getPrimaryImage());
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body(ApiResponse.builder()
+                        .status(400)
+                        .message(e.getMessage())
+                        .build());
+            }
+
+            product.setImages(imageUrls);
+            product.setPrimaryImage(primaryImageUrl);
             product = productService.createProduct(product);
-
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
                     .data(ProductMapper.INSTANCE.convertToResponse(product))
