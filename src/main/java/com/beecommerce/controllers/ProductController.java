@@ -12,6 +12,7 @@ import com.beecommerce.models.Specification;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.S3Service;
+import com.beecommerce.services.SpecificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,8 @@ public class ProductController {
     private CartService cartService;
     @Autowired
     private final S3Service s3Service;
-
+    @Autowired
+    private SpecificationService specificationService;
 
 
     @PostMapping
@@ -52,7 +54,7 @@ public class ProductController {
             return ResponseEntity.status(ErrorCode.PRODUCT_ALREADY_EXISTS.getStatusCode())
                     .body(ApiResponse.builder()
                             .success(false)
-                            .message("Error creating product: " + e.getMessage())
+                            .message(ErrorCode.PRODUCT_ALREADY_EXISTS.getMessage())
                             .build());
         }
     }
@@ -71,7 +73,6 @@ public class ProductController {
             }
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
-                    .message("Products retrieved successfully")
                     .data(products)
                     .build());
         } catch (Exception e) {
@@ -222,9 +223,29 @@ public class ProductController {
     }
 
     @GetMapping("/specifications")
-    public ResponseEntity<List<Specification>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
-        List<Specification> specifications = productService.getSpecificationsByCategoryId(categoryId);
-        return ResponseEntity.ok(specifications);
+    public ResponseEntity<ApiResponse<List<Specification>>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
+        try {
+            List<Specification> specifications = specificationService.getSpecificationsByCategoryId(categoryId);
+
+            if (specifications.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.SPECIFICATION_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.<List<Specification>>builder()
+                                .success(false)
+                                .message(ErrorCode.SPECIFICATION_NOT_FOUND.getMessage())
+                                .build());
+            }
+
+            return ResponseEntity.ok(ApiResponse.<List<Specification>>builder()
+                    .success(true)
+                    .data(specifications)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.<List<Specification>>builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
     }
 
 }

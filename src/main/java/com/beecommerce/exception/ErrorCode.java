@@ -16,8 +16,13 @@ public enum ErrorCode {
     DUPLICATE_PRODUCT_ID(409, "Duplicate product ID", HttpStatus.CONFLICT),
     CUSTOMER_NOT_FOUND(404, "Customer not found", HttpStatus.NOT_FOUND),
     PRODUCT_TYPE_NOT_FOUND(404, "Product type not found", HttpStatus.NOT_FOUND),
-    COLLECTION_NOT_FOUND(404, "Collection not found", HttpStatus.NOT_FOUND);
-
+    COLLECTION_NOT_FOUND(404, "Collection not found", HttpStatus.NOT_FOUND),
+    SPECIFICATION_NOT_FOUND(404, "Specification not found", HttpStatus.NOT_FOUND),
+    ORDER_NOT_FOUND(404, "Order not found", HttpStatus.NOT_FOUND),
+    UNAUTHORIZED(401, "Unauthorized", HttpStatus.UNAUTHORIZED),
+    FORBIDDEN(403, "Forbidden", HttpStatus.FORBIDDEN),
+    INTERNAL_SERVER_ERROR(500, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),
+    VARIANT_NOT_FOUND(404, "Variant not found", HttpStatus.NOT_FOUND);
 
     private final int code;
     private final String message;

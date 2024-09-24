@@ -9,10 +9,6 @@ import java.util.Optional;
 import org.bson.types.ObjectId;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
-//    Optional<Product> findByName(String name);
-//    List<Product> findAllByOrderByCreatedTimeDesc();
-//    get
-//    Product createProduct(Product product);
     List<Product> findByCategories_Id(String categoryId);
     List<Product> findTop20ByOrderByProductVariants_SoldDesc(PageRequest pageRequest);
 }

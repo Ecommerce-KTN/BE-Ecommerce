@@ -95,4 +95,15 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public ProductVariant findVariantById(Product product, String variantId) {
+        return product.getProductVariants().stream()
+                .filter(variant -> variant.getId().equals(variantId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void saveProduct(Product product) {
+        productRepository.save(product);
+    }
+
 }
