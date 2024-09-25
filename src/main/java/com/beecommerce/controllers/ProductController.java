@@ -290,6 +290,44 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/{productId}/related")
+    public ResponseEntity<ApiResponse> getRelatedProducts(@PathVariable String productId) {
+        try {
+            Product product = productService.getProductById(productId);
+            if (product == null) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
+                                .build());
+            }
+
+            String categoryId = product.getCategories().get(0).getId();
+
+            List<Product> relatedProducts = productService.getProductsByCategoryExcludingProduct(categoryId, productId);
+
+            if (relatedProducts.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.PRODUCT_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message("No related products found")
+                                .build());
+            }
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .message("Related products retrieved successfully")
+                    .data(relatedProducts)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
+
 
     @PostMapping("{productId}/reviews")
     public ResponseEntity<?> getProductReviews(

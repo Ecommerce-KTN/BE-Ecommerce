@@ -90,4 +90,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public List<Product> getProductsByCategoryExcludingProduct(String categoryId, String excludedProductId) {
+        return productRepository.findByCategoriesIdAndIdNot(categoryId, excludedProductId);
+    }
+
 }
