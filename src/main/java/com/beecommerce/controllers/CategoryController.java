@@ -1,12 +1,11 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.dto.reponse.ApiResponse;
-import com.beecommerce.dto.reponse.CategoryResponse;
+import com.beecommerce.dto.response.ApiResponse;
+import com.beecommerce.dto.response.CategoryResponse;
 import com.beecommerce.dto.request.CategoryRequest;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
 import com.beecommerce.models.Category;
-import com.beecommerce.models.Product;
 import com.beecommerce.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

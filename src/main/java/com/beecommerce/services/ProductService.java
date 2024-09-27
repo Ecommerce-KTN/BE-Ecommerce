@@ -24,12 +24,7 @@ public class ProductService {
     private  ProductRepository productRepository;
 
     public Product createProduct(Product product) {
-        if (product.getProductVariants() != null && !product.getProductVariants().isEmpty()) {
-            for (ProductVariant variant : product.getProductVariants()) {
-                String sku = generateSku(product.getBrand(), variant.getValue(), variant.getPrice(), variant.getQuantity());
-                variant.setSKU(sku);
-            }
-        }
+
         return productRepository.save(product);
     }
 
@@ -81,14 +76,14 @@ public class ProductService {
         return productRepository.findTop20ByOrderByProductVariants_SoldDesc(PageRequest.of(0, 20));
     }
 
-    public List<Specification> getSpecificationsByCategoryId(String categoryId) {
-        List<Product> products = productRepository.findByCategories_Id(categoryId);
-
-        return products.stream()
-                .flatMap(product -> product.getSpecifications().stream())
-                .distinct()
-                .collect(Collectors.toList());
-    }
+//    public List<Specification> getSpecificationsByCategoryId(String categoryId) {
+//        List<Product> products = productRepository.findByCategories_Id(categoryId);
+//
+//        return products.stream()
+//                .flatMap(product -> product.getSpecifications().stream())
+//                .distinct()
+//                .collect(Collectors.toList());
+//    }
 
     public List<Product> getProductsByCategoryExcludingProduct(String categoryId, String excludedProductId) {
         return productRepository.findByCategoriesIdAndIdNot(categoryId, excludedProductId);

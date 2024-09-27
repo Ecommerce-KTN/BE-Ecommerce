@@ -1,7 +1,7 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.dto.reponse.LoginResponse;
-import com.beecommerce.dto.reponse.RefreshTokenResponse;
+import com.beecommerce.dto.response.LoginResponse;
+import com.beecommerce.dto.response.RefreshTokenResponse;
 import com.beecommerce.dto.request.LoginRequest;
 import com.beecommerce.dto.request.RegisterRequest;
 import com.beecommerce.security.services.UserDetailsServiceImpl;

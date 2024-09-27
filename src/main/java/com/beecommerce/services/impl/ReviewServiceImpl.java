@@ -1,6 +1,6 @@
 package com.beecommerce.services.impl;
 
-import com.beecommerce.dto.reponse.PaginatedResource;
+import com.beecommerce.dto.response.PaginatedResource;
 import com.beecommerce.dto.request.GetProductReviewsRequest;
 import com.beecommerce.dto.request.PostReviewRequest;
 import com.beecommerce.mapper.ReviewMapper;

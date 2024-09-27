@@ -4,6 +4,7 @@ import com.beecommerce.models.OptionValue;
 import com.beecommerce.models.ProductShape;
 import com.beecommerce.models.ProductVariant;
 import com.beecommerce.models.Specification;
+import com.beecommerce.models.enums.ProductOption;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -13,6 +14,8 @@ import software.amazon.awssdk.services.lexmodelsv2.model.Specifications;
 import java.awt.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 @Data
 @Getter
 @Setter
@@ -20,37 +23,22 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductRequest {
-
-    @NotBlank(message = "Product name cannot be empty.")
-    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
+    @NotBlank
+    @Size(min = 5, max = 120)
     private String name;
 
-    private MultipartFile primaryImage;
-
     private String brand;
-
+    private String shop;
+    private MultipartFile primaryImage;
     private List<MultipartFile> images;
-
     private String sellingType;
-
-    private ProductShape shape;
-
+    private ShapeRequest shape;
     private String description;
-
     private Double basePrice;
-
     private Double discountPrice;
-
     private Double price;
-
-    private Date createdTime;
-
-    private List<CategoryRequest> categories;
-
-    private List<Specification> specifications;
-
-    private List<OptionValue> optionValues;
-
-    private List<ProductVariant> productVariants;
-
+    private List<String> categories;
+    private Map<String, String> specifications;
+    private Map<ProductOption, List<String>> attributes;
+    private List<ProductVariantRequest> productVariants;
 }

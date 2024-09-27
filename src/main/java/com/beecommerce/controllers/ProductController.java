@@ -1,16 +1,20 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.dto.reponse.ApiResponse;
+import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.request.ProductRequest;
+import com.beecommerce.dto.request.ProductVariantRequest;
+import com.beecommerce.dto.response.ApiResponse;
+import com.beecommerce.dto.response.PaginatedResource;
+import com.beecommerce.dto.response.ProductResponse;
 import com.beecommerce.exception.ErrorCode;
 import com.beecommerce.exception.Exception;
 import com.beecommerce.exception.SuccessCode;
 import com.beecommerce.mapper.ProductMapper;
 import com.beecommerce.models.Product;
-import com.beecommerce.dto.reponse.PaginatedResource;
 import com.beecommerce.dto.request.GetProductReviewsRequest;
 import com.beecommerce.models.Review;
 import com.beecommerce.models.Specification;
+import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.ReviewService;
@@ -25,9 +29,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -44,87 +51,58 @@ public class ProductController {
     @Autowired
     private final S3Service s3Service;
 
+    @Autowired
+    private final ProductMapper productMapper;
 
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createProduct(@ModelAttribute ProductRequest request) {
-        try {
-            Product product = ProductMapper.INSTANCE.convertToEntity(request);
-            if (request.getPrimaryImage().isEmpty()) {
-                return ResponseEntity.badRequest().body(ApiResponse.builder()
-                        .status(400)
-                        .message("Primary Image is required")
-                        .build());
-            }
-            if (request.getPrimaryImage().getSize() > 100 * 1024 * 1024) {
-                return ResponseEntity.badRequest().body(ApiResponse.builder()
-                        .status(400)
-                        .message("Primary Image size must be less than 10MB")
-                        .build());
-            }
-
-            // Validate image list
-            if (request.getImages().size() > 10) {
-                return ResponseEntity.badRequest().body(ApiResponse.builder()
-                        .status(400)
-                        .message("Number of images must be less than 10")
-                        .build());
-            }
-            for (MultipartFile image : request.getImages()) {
-                if (image.getSize() > 100 * 1024 * 1024) {
-                    return ResponseEntity.badRequest().body(ApiResponse.builder()
-                            .status(400)
-                            .message("Image size must be less than 10MB")
-                            .build());
-                }
-            }
-
-            // Upload images to S3
-            List<String> imageUrls = new ArrayList<>();
-            if(request.getImages().size() >0) {
-                for (MultipartFile image : request.getImages()) {
-                    if(!image.isEmpty() ){
-                        String imageUrl;
-                        try {
-                            imageUrl = s3Service.uploadFileToS3(image);
-                        } catch (Exception e) {
-                            return ResponseEntity.badRequest().body(ApiResponse.builder()
-                                    .status(400)
-                                    .message(e.getMessage())
-                                    .build());
-                        }
-                        imageUrls.add(imageUrl);
-                    }
-
-                }
-            }
-
-
-            String primaryImageUrl;
-            try {
-                primaryImageUrl = s3Service.uploadFileToS3(request.getPrimaryImage());
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body(ApiResponse.builder()
-                        .status(400)
-                        .message(e.getMessage())
-                        .build());
-            }
-
-            product.setImages(imageUrls);
-            product.setPrimaryImage(primaryImageUrl);
-            product = productService.createProduct(product);
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .success(true)
-                    .data(ProductMapper.INSTANCE.convertToResponse(product))
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(ErrorCode.PRODUCT_ALREADY_EXISTS.getStatusCode())
-                    .body(ApiResponse.builder()
-                            .success(false)
-                            .message("Error creating product: " + e.getMessage())
-                            .build());
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<ProductResponse> addProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
+        // Upload primary image to S3
+        String primaryImageUrl = null;
+        if (productRequest.getPrimaryImage() != null && !productRequest.getPrimaryImage().isEmpty()) {
+            primaryImageUrl = s3Service.uploadFileToS3(productRequest.getPrimaryImage());
         }
+
+        // Upload product images to S3
+        List<String> imageUrls = new ArrayList<>();
+        if (productRequest.getImages() != null && !productRequest.getImages().isEmpty()) {
+            imageUrls = productRequest.getImages().stream()
+                    .map(image -> s3Service.uploadFileToS3(image))
+                    .collect(Collectors.toList());
+        }
+
+        // Map request to entity
+        Product product = productMapper.toProduct(productRequest);
+        product.setPrimaryImage(primaryImageUrl);  // Set primary image URL
+        product.setImages(imageUrls);  // Set uploaded image URLs
+
+        // Handle product variants images
+        if (productRequest.getProductVariants() != null) {
+            productRequest.getProductVariants().forEach(variantRequest -> {
+                List<String> variantImageUrls;
+                if (variantRequest.getImages() != null && !variantRequest.getImages().isEmpty()) {
+                    variantImageUrls = variantRequest.getImages().stream()
+                            .map(image -> s3Service.uploadFileToS3(image))
+                            .collect(Collectors.toList());
+                } else {
+                    variantImageUrls = new ArrayList<>();
+                }
+
+                product.getProductVariants().stream()
+                        .filter(v -> v.getSKU().equals(variantRequest.getSKU()))
+                        .forEach(v -> v.setImages(variantImageUrls));
+            });
+        }
+        // Save product
+        Product savedProduct = productService.createProduct(product);
+
+        // Map entity to response DTO
+        ProductResponse productResponse = productMapper.toProductResponse(savedProduct);
+
+        return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
+
+
 
 
     @GetMapping
@@ -178,24 +156,24 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest) {
-        try {
-            Optional<Product> updatedProduct = productService.updateProduct(id, productRequest);
-
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .success(true)
-                    .message(SuccessCode.PRODUCT_UPDATED.getMessage())
-                    .data(ProductMapper.INSTANCE.convertToResponse(updatedProduct.get()))
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
-                    .body(ApiResponse.builder()
-                            .success(false)
-                            .message(e.getMessage())
-                            .build());
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ApiResponse> updateProduct(@PathVariable String id, @RequestBody ProductRequest productRequest) {
+//        try {
+//            Optional<Product> updatedProduct = productService.updateProduct(id, productRequest);
+//
+//            return ResponseEntity.ok(ApiResponse.builder()
+//                    .success(true)
+//                    .message(SuccessCode.PRODUCT_UPDATED.getMessage())
+//                    .data(ProductMapper.INSTANCE.convertToResponse(updatedProduct.get()))
+//                    .build());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+//                    .body(ApiResponse.builder()
+//                            .success(false)
+//                            .message(e.getMessage())
+//                            .build());
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String id) {
@@ -339,10 +317,10 @@ public class ProductController {
         PaginatedResource<Review> result = reviewService.getProductReviewsPaginated(productId, dto, pageable);
         return new ResponseEntity<>(new ApiResponse<Object>(result, "Success", HttpStatus.OK.value(), true, null), HttpStatus.OK);
     }
-    @GetMapping("/specifications")
-    public ResponseEntity<List<Specification>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
-        List<Specification> specifications = productService.getSpecificationsByCategoryId(categoryId);
-        return ResponseEntity.ok(specifications);
-    }
+//    @GetMapping("/specifications")
+//    public ResponseEntity<List<Specification>> getSpecificationsByCategoryId(@RequestParam String categoryId) {
+//        List<Specification> specifications = productService.getSpecificationsByCategoryId(categoryId);
+//        return ResponseEntity.ok(specifications);
+//    }
 
 }

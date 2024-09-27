@@ -1,6 +1,5 @@
-package com.beecommerce.dto.reponse;
+package com.beecommerce.dto.response;
 
-import com.beecommerce.models.Product;
 import com.beecommerce.models.enums.ProductOption;
 import lombok.*;
 
@@ -16,20 +15,13 @@ import java.util.List;
 public class CategoryResponse {
 
     private String id;
-
     private String name;
-
     private String description;
-
     private String image;
-
     private String parentId;
-
     private Date createdTime;
-
     private String banner;
-
     private String icon;
-
     private List<ProductOption> options;
+    private List<String> specifications;
 }

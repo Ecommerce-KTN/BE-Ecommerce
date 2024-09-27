@@ -1,14 +1,18 @@
-    package com.beecommerce.models;
-    import com.beecommerce.models.enums.SellingType;
-    import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-    import com.fasterxml.jackson.databind.ser.std.DateSerializer;
-    import jakarta.validation.constraints.NotBlank;
-    import jakarta.validation.constraints.Size;
-    import lombok.*;
-    import org.springframework.data.annotation.Id;
-    import org.springframework.data.mongodb.core.mapping.Document;
-    import java.util.Date;
-    import java.util.List;
+package com.beecommerce.models;
+
+import com.beecommerce.models.enums.ProductOption;
+import com.beecommerce.models.enums.SellingType;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Document("products")
@@ -36,8 +40,8 @@ public class Product {
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
     private List<Category> categories;
-    private List<Specification> specifications;
-    private List<OptionValue> optionValues;
+    private Map<String, String> specifications;
+    private Map<ProductOption, List<String>> attributes;
     private List<ProductVariant> productVariants;
     private Long reviewCount;
     private Double avgRating;

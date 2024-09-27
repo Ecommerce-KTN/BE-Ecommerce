@@ -1,8 +1,8 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.dto.reponse.ApiResponse;
+import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.reponse.CollectionRequest;
-import com.beecommerce.dto.reponse.CollectionResponse;
+import com.beecommerce.dto.response.CollectionResponse;
 import com.beecommerce.mapper.CollectionMapper;
 import com.beecommerce.models.Collection;
 import com.beecommerce.services.CollectionService;
