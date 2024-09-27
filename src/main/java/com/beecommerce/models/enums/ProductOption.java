@@ -1,31 +1,21 @@
 package com.beecommerce.models.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ProductOption {
     COLOR("Color"),
+    SIZE("Size"),
     RAM("RAM"),
     STORAGE("Storage");
 
-    private final String value;
+    private final String displayName;
 
-    ProductOption(String value) {
-        this.value = value;
+    ProductOption(String displayName) {
+        this.displayName = displayName;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return this.value;
-    }
-
-    public static ProductOption fromValue(String value) {
-        for (ProductOption option : values()) {
-            if (option.value.equalsIgnoreCase(value)) {
-                return option;
-            }
-        }
-        throw new IllegalArgumentException("Unknown ProductOption value: " + value);
+    public String getDisplayName() {
+        return displayName;
     }
 }

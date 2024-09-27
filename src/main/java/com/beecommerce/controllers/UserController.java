@@ -1,6 +1,6 @@
 package com.beecommerce.controllers;
 
-import com.beecommerce.dto.reponse.ApiResponse;
+import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.request.FavoriteProductRequest;
 import com.beecommerce.services.UserService;
 import lombok.RequiredArgsConstructor;

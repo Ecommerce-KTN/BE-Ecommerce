@@ -19,6 +19,7 @@ public enum ErrorCode {
     COLLECTION_NOT_FOUND(404, "Collection not found", HttpStatus.NOT_FOUND);
 
 
+
     private final int code;
     private final String message;
     private final HttpStatus statusCode;

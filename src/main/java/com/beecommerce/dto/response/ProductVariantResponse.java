@@ -1,20 +1,17 @@
-package com.beecommerce.models;
+package com.beecommerce.dto.response;
 
 import com.beecommerce.models.enums.ProductOption;
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class ProductVariant {
-    @Id
+public class ProductVariantResponse {
     private String id;
     private Double basePrice;
     private Double discountPrice;

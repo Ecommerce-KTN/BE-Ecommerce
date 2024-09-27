@@ -1,4 +1,4 @@
-package com.beecommerce.dto.reponse;
+package com.beecommerce.dto.response;
 
 import com.beecommerce.models.Product;
 import lombok.AllArgsConstructor;
