@@ -36,17 +36,17 @@ public class Category {
     private Date createdTime;
     private String banner;
     private String icon;
-    @Field("options")
-    private List<String> optionValues;
-    public List<ProductOption> getOptions() {
-        return optionValues.stream()
-                .map(ProductOption::fromValue)
-                .toList();
-    }
-
-    public void setOptions(List<ProductOption> options) {
-        this.optionValues = options.stream()
-                .map(ProductOption::getValue)
-                .toList();
-    }
+//    @Field("options")
+//    private List<String> optionValues;
+//    public List<ProductOption> getOptions() {
+//        return optionValues.stream()
+//                .map(ProductOption::fromValue)
+//                .toList();
+//    }
+//
+//    public void setOptions(List<ProductOption> options) {
+//        this.optionValues = options.stream()
+//                .map(ProductOption::getValue)
+//                .toList();
+//    }
 }

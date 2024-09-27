@@ -15,4 +15,5 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 //    Product createProduct(Product product);
     List<Product> findByCategories_Id(String categoryId);
     List<Product> findTop20ByOrderByProductVariants_SoldDesc(PageRequest pageRequest);
+    List<Product> findByCategoriesIdAndIdNot(String categoryId, String productId);
 }
