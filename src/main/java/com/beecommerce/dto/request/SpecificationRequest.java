@@ -7,9 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpecificationRequest {
-    @NotBlank
-    private String key;
-
-    @NotBlank
+    private String id;
+    private String name;
     private String value;
+    private String categoryId;
 }

@@ -1,6 +1,7 @@
 package com.beecommerce.dto.request;
 
 import com.beecommerce.models.enums.ProductOption;
+import com.beecommerce.models.enums.SpecificationOption;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,6 @@ public class CategoryRequest {
     private Date createdTime;
     private String banner;
     private String icon;
-    private List<ProductOption> options;
+    private List<String> options;
     private List<String> specifications;
 }

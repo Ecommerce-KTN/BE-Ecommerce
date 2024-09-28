@@ -1,6 +1,7 @@
 package com.beecommerce.models;
 
 import com.beecommerce.models.enums.ProductOption;
+import com.beecommerce.models.enums.SpecificationOption;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import jakarta.persistence.GeneratedValue;
@@ -36,17 +37,33 @@ public class Category {
     private Date createdTime;
     private String banner;
     private String icon;
-//    @Field("options")
-//    private List<String> optionValues;
-//    public List<ProductOption> getOptions() {
-//        return optionValues.stream()
-//                .map(ProductOption::fromValue)
-//                .toList();
-//    }
-//
-//    public void setOptions(List<ProductOption> options) {
-//        this.optionValues = options.stream()
-//                .map(ProductOption::getValue)
-//                .toList();
-//    }
+    @Field("options")
+    private List<String> options;
+
+    public List<ProductOption> getOptions() {
+        return options.stream()
+                .map(ProductOption::fromDisplayName)
+                .toList();
+    }
+
+    public void setOptions(List<ProductOption> options) {
+        this.options = options.stream()
+                .map(ProductOption::getDisplayName)
+                .toList();
+    }
+
+    @Field("specifications")
+    private List<String> specifications;
+
+    public List<SpecificationOption> getSpecifications() {
+        return specifications.stream()
+                .map(SpecificationOption::fromDisplayName)
+                .toList();
+    }
+
+    public void setSpecifications(List<SpecificationOption> specifications) {
+        this.specifications = specifications.stream()
+                .map(SpecificationOption::getDisplayName)
+                .toList();
+    }
 }

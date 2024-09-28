@@ -1,16 +1,14 @@
 package com.beecommerce.mapper;
 
 import com.beecommerce.dto.ShapeResponse;
+import com.beecommerce.dto.request.*;
 import com.beecommerce.dto.response.CategoryResponse;
 import com.beecommerce.dto.response.ProductVariantResponse;
-import com.beecommerce.dto.request.ProductRequest;
-import com.beecommerce.dto.request.ProductVariantRequest;
 import com.beecommerce.dto.response.ProductResponse;
-import com.beecommerce.models.Category;
-import com.beecommerce.models.Product;
-import com.beecommerce.models.ProductShape;
-import com.beecommerce.models.ProductVariant;
+import com.beecommerce.dto.response.SpecificationResponse;
+import com.beecommerce.models.*;
 import com.beecommerce.repositories.CategoryRepository;
+import com.beecommerce.repositories.SpecificationRepository;
 import com.beecommerce.services.S3Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,6 +26,9 @@ public abstract class ProductMapper {
 
     @Autowired
     protected CategoryRepository categoryRepository;
+
+    @Autowired
+    protected SpecificationRepository specificationRepository;
 
     @Mapping(target = "primaryImage", expression = "java(productRequest.getPrimaryImage() == null || productRequest.getPrimaryImage().isEmpty() ? null :uploadPrimaryImageToS3(productRequest.getPrimaryImage()))")
     @Mapping(target = "images", expression = "java(productRequest.getImages() == null || productRequest.getImages().isEmpty() ? null :uploadImagesToS3(productRequest.getImages()))")
@@ -51,9 +52,18 @@ public abstract class ProductMapper {
     @Mapping(target = "specifications", ignore = true)
     public abstract CategoryResponse toCategoryResponse(Category category);
 
+    @Mapping(target = "id", ignore = true)
+    public abstract Category toCategory(CategoryRequest categoryRequest);
+
+    @Mapping(target = "id", ignore = true)
+    public abstract SpecificationResponse toSpecificationResponse(Specification specification);
+
+    public abstract Specification toSpecification(SpecificationRequest specificationRequest);
+
     public abstract ShapeResponse toShapeResponse(ProductShape shape);
 
-    public abstract ProductShape toProductShape(ShapeResponse shapeResponse);
+    @Mapping(target = "id", ignore = true)
+    public abstract ProductShape toProductShape(ShapeRequest shapeRequest);
 
     protected String uploadPrimaryImageToS3(MultipartFile file) {
         return s3Service.uploadFileToS3(file);
@@ -75,6 +85,19 @@ public abstract class ProductMapper {
     protected List<CategoryResponse> mapCategoriesToCategoryResponses(List<Category> categories) {
         return categories.stream()
                 .map(this::toCategoryResponse)
+                .collect(Collectors.toList());
+    }
+
+    protected List<Specification> mapSpecificationIdsToSpecifications(List<String> specificationIds) {
+        return specificationIds.stream()
+                .map(id -> specificationRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Specification not found with id: " + id)))
+                .collect(Collectors.toList());
+    }
+
+    protected List<SpecificationResponse> mapSpecificationsToSpecificationResponses(List<Specification> specifications) {
+        return specifications.stream()
+                .map(this::toSpecificationResponse)
                 .collect(Collectors.toList());
     }
 }

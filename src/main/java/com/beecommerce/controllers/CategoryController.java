@@ -24,14 +24,17 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         try {
-            Category category = categoryService.createCategory(CategoryMapper.INSTANCE.convertToEntity(request));
-            return ResponseEntity.ok(CategoryMapper.INSTANCE.convertToResponse(category));
+            Category category = categoryService.createCategory(categoryMapper.convertToEntity(request));
+            return ResponseEntity.ok(categoryMapper.convertToResponse(category));
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.CATEGORY_ALREADY_EXISTS.getStatusCode())
-                    .body(CategoryMapper.INSTANCE.convertToResponse(Category.builder().build()));
+                    .body(categoryMapper.convertToResponse(Category.builder().build()));
         }
     }
 
@@ -49,7 +52,7 @@ public class CategoryController {
             }
 
             List<CategoryResponse> categoryResponses = categories.stream()
-                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .map(categoryMapper::convertToResponse)
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -79,7 +82,7 @@ public class CategoryController {
             }
 
             List<CategoryResponse> categoryResponses = categories.stream()
-                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .map(categoryMapper::convertToResponse)
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -109,7 +112,7 @@ public class CategoryController {
             }
 
             List<CategoryResponse> categoryResponses = categories.stream()
-                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .map(categoryMapper::convertToResponse)
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -139,7 +142,7 @@ public class CategoryController {
             }
 
             List<CategoryResponse> categoryResponses = categories.stream()
-                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .map(categoryMapper::convertToResponse)
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(ApiResponse.builder()
@@ -169,7 +172,7 @@ public class CategoryController {
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
                     .message("Category retrieved successfully")
-                    .data(CategoryMapper.INSTANCE.convertToResponse(category))
+                    .data(categoryMapper.convertToResponse(category))
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
@@ -188,7 +191,7 @@ public class CategoryController {
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
                     .message("Category updated successfully")
-                    .data(CategoryMapper.INSTANCE.convertToResponse(updatedCategory.get()))
+                    .data(categoryMapper.convertToResponse(updatedCategory.get()))
                     .build());
 
         } catch (Exception e) {

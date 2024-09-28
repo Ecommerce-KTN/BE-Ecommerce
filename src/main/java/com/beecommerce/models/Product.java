@@ -2,6 +2,7 @@ package com.beecommerce.models;
 
 import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.models.enums.SellingType;
+import com.beecommerce.models.enums.SpecificationOption;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +41,7 @@ public class Product {
     @JsonSerialize(using = DateSerializer.class)
     private Date createdTime;
     private List<Category> categories;
-    private Map<String, String> specifications;
+    private Map<SpecificationOption, String> specifications;
     private Map<ProductOption, List<String>> attributes;
     private List<ProductVariant> productVariants;
     private Long reviewCount;

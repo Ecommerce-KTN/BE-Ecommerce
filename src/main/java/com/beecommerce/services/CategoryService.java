@@ -30,8 +30,7 @@ public class CategoryService implements CategoryInterface {
 
 
     public Category getCategoryById(String id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+        return categoryRepository.findById(id).get();
     }
 
     public List<Category> get10Categories() {

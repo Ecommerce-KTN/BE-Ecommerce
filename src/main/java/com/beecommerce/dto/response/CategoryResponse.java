@@ -1,6 +1,7 @@
 package com.beecommerce.dto.response;
 
 import com.beecommerce.models.enums.ProductOption;
+import com.beecommerce.models.enums.SpecificationOption;
 import lombok.*;
 
 import java.util.Date;
@@ -22,6 +23,6 @@ public class CategoryResponse {
     private Date createdTime;
     private String banner;
     private String icon;
-    private List<ProductOption> options;
+    private List<String> options;
     private List<String> specifications;
 }

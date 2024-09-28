@@ -18,4 +18,13 @@ public enum ProductOption {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static ProductOption fromDisplayName(String displayName) {
+        for (ProductOption option : values()) {
+            if (option.getDisplayName().equalsIgnoreCase(displayName)) {
+                return option;
+            }
+        }
+        throw new IllegalArgumentException("No ProductOption with display name: " + displayName);
+    }
 }
