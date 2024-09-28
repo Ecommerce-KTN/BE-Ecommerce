@@ -96,7 +96,65 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/parents")
+    public ResponseEntity<ApiResponse> getParentCategories() {
+        try {
+            List<Category> categories = categoryService.getParentCategories();
+            if (categories.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.CATEGORY_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.CATEGORY_NOT_FOUND.getMessage())
+                                .build());
+            }
 
+            List<CategoryResponse> categoryResponses = categories.stream()
+                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(categoryResponses)
+                    .build());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
+
+    @GetMapping("/subcategories/{parentId}")
+    public ResponseEntity<ApiResponse> getSubCategories(@PathVariable String parentId) {
+        try {
+            List<Category> categories = categoryService.getSubCategories(parentId);
+            if (categories.isEmpty()) {
+                return ResponseEntity.status(ErrorCode.CATEGORY_NOT_FOUND.getStatusCode())
+                        .body(ApiResponse.builder()
+                                .success(false)
+                                .message(ErrorCode.CATEGORY_NOT_FOUND.getMessage())
+                                .build());
+            }
+
+            List<CategoryResponse> categoryResponses = categories.stream()
+                    .map(CategoryMapper.INSTANCE::convertToResponse)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(ApiResponse.builder()
+                    .success(true)
+                    .data(categoryResponses)
+                    .build());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable String id) {
         try {

@@ -68,5 +68,11 @@ public class CategoryService implements CategoryInterface {
         return categoryRepository.save(subCategory);
     }
 
+    public List<Category> getParentCategories() {
+        return categoryRepository.findByParentIdIsNull();
+    }
 
+    public List<Category> getSubCategories(String parentId) {
+        return categoryRepository.findByParentId(parentId);
+    }
 }
