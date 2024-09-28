@@ -20,5 +20,5 @@ public class ProductVariantResponse {
     private List<String> images;
     private long quantity;
     private long sold;
-    private Map<ProductOption, String> attributes;
+    private Map<String, String> attributes;
 }

@@ -17,8 +17,6 @@ public interface CollectionMapper {
     @Mapping(target = "isPaidForHomeLanding", ignore = true)
     Collection convertToEntity(CollectionRequest request);
 
-
-//    Unmapped target properties: "brand, shopId, products, isFeatured, isPaidForHomeLanding".
     @Mapping(target = "brand", ignore = true)
     @Mapping(target = "shopId", ignore = true)
     @Mapping(target = "products", ignore = true)

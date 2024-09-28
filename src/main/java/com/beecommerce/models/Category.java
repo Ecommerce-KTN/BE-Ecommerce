@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class Category {
     @Id
     private String id;
@@ -37,33 +37,7 @@ public class Category {
     private Date createdTime;
     private String banner;
     private String icon;
-    @Field("options")
-    private List<String> options;
+    private List<ProductOption> options= new ArrayList<>();
+    private List<SpecificationOption> specifications= new ArrayList<>();
 
-    public List<ProductOption> getOptions() {
-        return options.stream()
-                .map(ProductOption::fromDisplayName)
-                .toList();
-    }
-
-    public void setOptions(List<ProductOption> options) {
-        this.options = options.stream()
-                .map(ProductOption::getDisplayName)
-                .toList();
-    }
-
-    @Field("specifications")
-    private List<String> specifications;
-
-    public List<SpecificationOption> getSpecifications() {
-        return specifications.stream()
-                .map(SpecificationOption::fromDisplayName)
-                .toList();
-    }
-
-    public void setSpecifications(List<SpecificationOption> specifications) {
-        this.specifications = specifications.stream()
-                .map(SpecificationOption::getDisplayName)
-                .toList();
-    }
 }

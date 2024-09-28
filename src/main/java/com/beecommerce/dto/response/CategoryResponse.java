@@ -2,8 +2,12 @@ package com.beecommerce.dto.response;
 
 import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.models.enums.SpecificationOption;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Unwrapped;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +27,8 @@ public class CategoryResponse {
     private Date createdTime;
     private String banner;
     private String icon;
-    private List<String> options;
-    private List<String> specifications;
+    @Builder.Default
+    private List<String> options = new ArrayList<>();
+    @Builder.Default
+    private List<String> specifications = new ArrayList<>();
 }

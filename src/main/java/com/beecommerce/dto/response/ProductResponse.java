@@ -30,7 +30,7 @@ public class ProductResponse {
     private Double price;
     private List<CategoryResponse> categories;
     private Map<String, String> specifications;
-    private Map<ProductOption, List<String>> attributes;
+    private Map<String, List<String>> attributes;
     private List<VariantResponse> productVariants;
     private Long reviewCount;
     private Double avgRating;

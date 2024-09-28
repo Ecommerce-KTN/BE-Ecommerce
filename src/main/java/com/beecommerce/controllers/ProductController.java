@@ -2,8 +2,6 @@ package com.beecommerce.controllers;
 
 import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.request.ProductRequest;
-import com.beecommerce.dto.request.ProductVariantRequest;
-import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.response.PaginatedResource;
 import com.beecommerce.dto.response.ProductResponse;
 import com.beecommerce.exception.ErrorCode;
@@ -13,8 +11,6 @@ import com.beecommerce.mapper.ProductMapper;
 import com.beecommerce.models.Product;
 import com.beecommerce.dto.request.GetProductReviewsRequest;
 import com.beecommerce.models.Review;
-import com.beecommerce.models.Specification;
-import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.ReviewService;
@@ -27,13 +23,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")

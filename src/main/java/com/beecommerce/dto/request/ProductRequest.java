@@ -1,18 +1,11 @@
 package com.beecommerce.dto.request;
 
-import com.beecommerce.models.OptionValue;
-import com.beecommerce.models.ProductShape;
-import com.beecommerce.models.ProductVariant;
-import com.beecommerce.models.Specification;
 import com.beecommerce.models.enums.ProductOption;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.lexmodelsv2.model.Specifications;
 
-import java.awt.*;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +32,6 @@ public class ProductRequest {
     private Double price;
     private List<String> categories;
     private Map<String, String> specifications;
-    private Map<ProductOption, List<String>> attributes;
+    private Map<String, List<String>> attributes;
     private List<ProductVariantRequest> productVariants;
 }

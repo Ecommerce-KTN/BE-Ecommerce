@@ -24,5 +24,5 @@ public class ProductVariantRequest {
     private List<MultipartFile> images;
     private long quantity;
     private long sold;
-    private Map<ProductOption, String> attributes;
+    private Map<String, String> attributes;
 }

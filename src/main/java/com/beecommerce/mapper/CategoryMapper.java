@@ -37,8 +37,8 @@ public abstract class CategoryMapper {
         }
     }
 
-    @Mapping(target = "options",ignore = true, expression = "java(convertProductOptionsToDisplayNames(category.getOptions()))")
-    @Mapping(target = "specifications",ignore = true, expression = "java(convertSpecificationOptionsToDisplayNames(category.getSpecifications()))")
+    @Mapping(target = "options", expression = "java(convertProductOptionsToDisplayNames(category.getOptions()))")
+    @Mapping(target = "specifications", expression = "java(convertSpecificationOptionsToDisplayNames(category.getSpecifications()))")
     public abstract CategoryResponse convertToResponse(Category category);
 
     protected List<String> convertProductOptionsToDisplayNames(List<ProductOption> options) {
