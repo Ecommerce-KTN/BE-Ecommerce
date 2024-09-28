@@ -7,6 +7,7 @@ import com.beecommerce.models.Category;
 import com.beecommerce.repositories.CategoryRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -31,6 +32,10 @@ public class CategoryService implements CategoryInterface {
     public Category getCategoryById(String id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new Exception(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    public List<Category> get10Categories() {
+        return categoryRepository.findAll(PageRequest.of(0, 10)).getContent();
     }
 
     public Optional<Category> updateCategory(String id, CategoryRequest categoryRequest) {
