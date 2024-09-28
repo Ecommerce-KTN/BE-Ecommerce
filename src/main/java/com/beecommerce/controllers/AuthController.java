@@ -30,6 +30,34 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
+//    @PostMapping("/register")
+//    public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest req) {
+//        try {
+//            userDetailsService.registerUser(req);
+//
+//            return ResponseEntity.ok(ApiResponse.<String>builder()
+//                    .success(true)
+//                    .message("User registered successfully")
+//                    .status(HttpStatus.OK.value())
+//                    .build());
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(ApiResponse.<String>builder()
+//                            .success(false)
+//                            .message(e.getMessage())
+//                            .status(HttpStatus.BAD_REQUEST.value())
+//                            .build());
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(ApiResponse.<String>builder()
+//                            .success(false)
+//                            .message("Failed to register user")
+//                            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+//                            .error(e.getMessage())
+//                            .build());
+//        }
+//    }
+
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest req) {
         try {
@@ -40,6 +68,7 @@ public class AuthController {
                     .message("User registered successfully")
                     .status(HttpStatus.OK.value())
                     .build());
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.<String>builder()
@@ -47,6 +76,7 @@ public class AuthController {
                             .message(e.getMessage())
                             .status(HttpStatus.BAD_REQUEST.value())
                             .build());
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.<String>builder()
@@ -58,24 +88,49 @@ public class AuthController {
         }
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req, HttpServletResponse response)  {
+//        IdUsernamePasswordAuthenticationToken authenticationToken = (IdUsernamePasswordAuthenticationToken) authManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        req.getUsername(),
+//                        req.getPassword()
+//                )
+//        );
+//
+//        String accessToken = tokenService.issueAccessToken(authenticationToken);
+//        String refreshToken = tokenService.issueRefreshToken(authenticationToken);
+//
+//        CookieUtils.setCookie(response, "refresh_token", refreshToken, "/", true);
+//
+//        LoginResponse resp = new LoginResponse(
+//                accessToken, refreshToken
+//        );
+//        return new ResponseEntity<>(resp, HttpStatus.OK);
+//    }
+
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req, HttpServletResponse response)  {
-        IdUsernamePasswordAuthenticationToken authenticationToken = (IdUsernamePasswordAuthenticationToken) authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.getUsername(),
-                        req.getPassword()
-                )
-        );
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest req, HttpServletResponse response) {
+        try {
+            IdUsernamePasswordAuthenticationToken authenticationToken =
+                    (IdUsernamePasswordAuthenticationToken) authManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    req.getUsername(),
+                                    req.getPassword()
+                            )
+                    );
 
-        String accessToken = tokenService.issueAccessToken(authenticationToken);
-        String refreshToken = tokenService.issueRefreshToken(authenticationToken);
+            String accessToken = tokenService.issueAccessToken(authenticationToken);
+            String refreshToken = tokenService.issueRefreshToken(authenticationToken);
 
-        CookieUtils.setCookie(response, "refresh_token", refreshToken, "/", true);
+            CookieUtils.setCookie(response, "refresh_token", refreshToken, "/", true);
 
-        LoginResponse resp = new LoginResponse(
-                accessToken, refreshToken
-        );
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+            LoginResponse resp = new LoginResponse(accessToken, refreshToken);
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponse(null, "Login failed: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/refresh-token")

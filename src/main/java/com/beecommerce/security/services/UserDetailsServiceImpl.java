@@ -2,6 +2,7 @@ package com.beecommerce.security.services;
 
 import com.beecommerce.dto.request.RegisterRequest;
 import com.beecommerce.models.CustomUserDetails;
+import com.beecommerce.models.enums.Role;
 import com.beecommerce.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -57,6 +58,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String encodedPassword = passwordEncoder.encode(req.getPassword());
         user.setPassword(encodedPassword);
 
+        user.setRole(Role.USER);
+
         userRepo.save(user);
     }
 }
+
