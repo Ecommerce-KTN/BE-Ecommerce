@@ -1,5 +1,6 @@
 package com.beecommerce.controllers;
 
+import com.beecommerce.dto.response.ApiResponse;
 import com.beecommerce.dto.response.LoginResponse;
 import com.beecommerce.dto.response.RefreshTokenResponse;
 import com.beecommerce.dto.request.LoginRequest;
@@ -30,9 +31,31 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
-        userDetailsService.registerUser(req);
-        return new ResponseEntity<>("User registered", HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest req) {
+        try {
+            userDetailsService.registerUser(req);
+
+            return ResponseEntity.ok(ApiResponse.<String>builder()
+                    .success(true)
+                    .message("User registered successfully")
+                    .status(HttpStatus.OK.value())
+                    .build());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.<String>builder()
+                            .success(false)
+                            .message(e.getMessage())
+                            .status(HttpStatus.BAD_REQUEST.value())
+                            .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.<String>builder()
+                            .success(false)
+                            .message("Failed to register user")
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                            .error(e.getMessage())
+                            .build());
+        }
     }
 
     @PostMapping("/login")

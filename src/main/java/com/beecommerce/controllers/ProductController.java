@@ -306,7 +306,6 @@ public class ProductController {
         }
     }
 
-
     @PostMapping("{productId}/reviews")
     public ResponseEntity<?> getProductReviews(
             @PathVariable("productId") String productId,
