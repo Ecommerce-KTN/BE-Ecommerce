@@ -42,8 +42,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public void registerUser(RegisterRequest req) {
-        com.beecommerce.models.User user = new com.beecommerce.models.User();
+        if (userRepo.existsByUsername(req.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
 
+        if (userRepo.existsByEmail(req.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        com.beecommerce.models.User user = new com.beecommerce.models.User();
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
 
