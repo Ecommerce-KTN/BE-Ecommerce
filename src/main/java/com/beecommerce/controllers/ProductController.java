@@ -50,48 +50,9 @@ public class ProductController {
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ProductResponse> addProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
-        // Upload primary image to S3
-        String primaryImageUrl = null;
-        if (productRequest.getPrimaryImage() != null && !productRequest.getPrimaryImage().isEmpty()) {
-            primaryImageUrl = s3Service.uploadFileToS3(productRequest.getPrimaryImage());
-        }
-
-        // Upload product images to S3
-        List<String> imageUrls = new ArrayList<>();
-        if (productRequest.getImages() != null && !productRequest.getImages().isEmpty()) {
-            imageUrls = productRequest.getImages().stream()
-                    .map(image -> s3Service.uploadFileToS3(image))
-                    .collect(Collectors.toList());
-        }
-
-        // Map request to entity
         Product product = productMapper.toProduct(productRequest);
-        product.setPrimaryImage(primaryImageUrl);  // Set primary image URL
-        product.setImages(imageUrls);  // Set uploaded image URLs
-
-        // Handle product variants images
-        if (productRequest.getProductVariants() != null) {
-            productRequest.getProductVariants().forEach(variantRequest -> {
-                List<String> variantImageUrls;
-                if (variantRequest.getImages() != null && !variantRequest.getImages().isEmpty()) {
-                    variantImageUrls = variantRequest.getImages().stream()
-                            .map(image -> s3Service.uploadFileToS3(image))
-                            .collect(Collectors.toList());
-                } else {
-                    variantImageUrls = new ArrayList<>();
-                }
-
-                product.getProductVariants().stream()
-                        .filter(v -> v.getSKU().equals(variantRequest.getSKU()))
-                        .forEach(v -> v.setImages(variantImageUrls));
-            });
-        }
-        // Save product
         Product savedProduct = productService.createProduct(product);
-
-        // Map entity to response DTO
         ProductResponse productResponse = productMapper.toProductResponse(savedProduct);
-
         return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
 
