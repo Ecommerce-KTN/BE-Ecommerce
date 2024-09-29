@@ -70,10 +70,13 @@ public class ProductController {
                                 .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
                                 .build());
             }
+            List<ProductResponse> productsResponse = products.stream()
+                    .map(productMapper::toProductResponse)
+                    .collect(Collectors.toList());
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
                     .message("Products retrieved successfully")
-                    .data(products)
+                    .data(productsResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
@@ -97,9 +100,10 @@ public class ProductController {
                                 .message(ErrorCode.PRODUCT_NOT_FOUND.getMessage())
                                 .build());
             }
+            ProductResponse productResponse = productMapper.toProductResponse(product);
             return ResponseEntity.ok(ApiResponse.builder()
                     .success(true)
-                    .data(product)
+                    .data(productResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())

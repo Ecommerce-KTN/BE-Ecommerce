@@ -35,4 +35,6 @@ public class ProductResponse {
     private Long reviewCount;
     private Double avgRating;
     private Date createdTime;
+    private String priceRange;
+    private String discountPriceRange;
 }

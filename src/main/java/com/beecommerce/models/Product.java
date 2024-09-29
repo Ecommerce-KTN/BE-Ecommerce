@@ -47,4 +47,30 @@ public class Product {
     private Long reviewCount;
     private Double avgRating;
 
+    public String calculatePriceRanges() {
+        if (productVariants != null && !productVariants.isEmpty()) {
+            Double minPrice = productVariants.stream().mapToDouble(ProductVariant::getPrice).min().orElse(0);
+            Double maxPrice = productVariants.stream().mapToDouble(ProductVariant::getPrice).max().orElse(0);
+            if(minPrice.equals(maxPrice)) {
+                return String.format("%.2f", minPrice);
+            }
+            return String.format("%.2f - %.2f", minPrice, maxPrice);
+        } else {
+            return "";
+        }
+    }
+
+    public String calculateDiscountPriceRanges() {
+        if (productVariants != null && !productVariants.isEmpty()) {
+            Double minPrice = productVariants.stream().mapToDouble(ProductVariant::getDiscountPrice).min().orElse(0);
+            Double maxPrice = productVariants.stream().mapToDouble(ProductVariant::getDiscountPrice).max().orElse(0);
+            if(minPrice.equals(maxPrice)) {
+                return String.format("%.2f", minPrice);
+            }
+            return String.format("%.2f - %.2f", minPrice, maxPrice);
+        } else {
+            return "";
+        }
+    }
+
 }

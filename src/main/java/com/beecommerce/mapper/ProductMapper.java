@@ -47,6 +47,8 @@ public abstract class ProductMapper {
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")
     @Mapping(target = "specifications", expression = "java(convertSpecificationsToMap(product.getSpecifications()))")
     @Mapping(target = "attributes", expression = "java(convertAttributesToDisplayNames(product.getAttributes()))")
+    @Mapping(target = "priceRange", expression = "java(product.calculatePriceRanges())")
+    @Mapping(target = "discountPriceRange", expression = "java(product.calculateDiscountPriceRanges())")
     public abstract ProductResponse toProductResponse(Product product);
 
     @Mapping(target = "id", ignore = true)
