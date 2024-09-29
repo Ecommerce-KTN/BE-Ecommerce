@@ -21,6 +21,5 @@ public class ProductVariantRequest {
     private String SKU;
     private List<MultipartFile> images;
     private long quantity;
-    private long sold;
     private Map<String, String> attributes;
 }
