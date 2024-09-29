@@ -22,6 +22,7 @@ public class ProductResponse {
     private List<String> images;
     private String brand;
     private String shop;
+    private long quantity;
     private String sellingType;
     private ShapeResponse shape;
     private String description;
@@ -37,4 +38,5 @@ public class ProductResponse {
     private Date createdTime;
     private String priceRange;
     private String discountPriceRange;
+    private List<CollectionResponse> collections;
 }

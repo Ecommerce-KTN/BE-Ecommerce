@@ -31,6 +31,7 @@ public class Product {
     private String primaryImage;
     private String brand;
     private String shop;
+    private long quantity;
     private List<String> images;
     private SellingType sellingType;
     private ProductShape shape;
@@ -46,6 +47,7 @@ public class Product {
     private List<ProductVariant> productVariants;
     private Long reviewCount;
     private Double avgRating;
+    private List<Collection> collections;
 
     public String calculatePriceRanges() {
         if (productVariants != null && !productVariants.isEmpty()) {

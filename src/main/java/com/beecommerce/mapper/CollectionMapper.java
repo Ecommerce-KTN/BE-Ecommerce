@@ -7,21 +7,20 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
-public interface CollectionMapper {
-    CollectionMapper INSTANCE = Mappers.getMapper(CollectionMapper.class);
+@Mapper(componentModel = "spring")
+public abstract class CollectionMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "shop", ignore = true)
     @Mapping(target = "isFeatured", ignore = true)
     @Mapping(target = "isPaidForHomeLanding", ignore = true)
-    Collection convertToEntity(CollectionRequest request);
+    public abstract Collection convertToEntity(CollectionRequest request);
 
     @Mapping(target = "brand", ignore = true)
     @Mapping(target = "shopId", ignore = true)
     @Mapping(target = "products", ignore = true)
     @Mapping(target = "isFeatured", ignore = true)
     @Mapping(target = "isPaidForHomeLanding", ignore = true)
-    CollectionResponse convertToResponse(Collection collection);
+    public abstract CollectionResponse convertToResponse(Collection collection);
 
 }

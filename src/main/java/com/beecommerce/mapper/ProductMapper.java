@@ -2,14 +2,12 @@ package com.beecommerce.mapper;
 
 import com.beecommerce.dto.ShapeResponse;
 import com.beecommerce.dto.request.*;
-import com.beecommerce.dto.response.CategoryResponse;
-import com.beecommerce.dto.response.ProductVariantResponse;
-import com.beecommerce.dto.response.ProductResponse;
-import com.beecommerce.dto.response.SpecificationResponse;
+import com.beecommerce.dto.response.*;
 import com.beecommerce.models.*;
 import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.models.enums.SpecificationOption;
 import com.beecommerce.repositories.CategoryRepository;
+import com.beecommerce.repositories.CollectionRepository;
 import com.beecommerce.services.S3Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,6 +31,12 @@ public abstract class ProductMapper {
     @Autowired
     protected CategoryMapper categoryMapper;
 
+    @Autowired
+    protected CollectionMapper collectionMapper;
+
+    @Autowired
+    protected CollectionRepository collectionRepository;
+
     @Mapping(target = "primaryImage", expression = "java(productRequest.getPrimaryImage() == null || productRequest.getPrimaryImage().isEmpty() ? null : uploadPrimaryImageToS3(productRequest.getPrimaryImage()))")
     @Mapping(target = "images", expression = "java(productRequest.getImages() == null || productRequest.getImages().isEmpty() ? null : uploadImagesToS3(productRequest.getImages()))")
     @Mapping(target = "createdTime", expression = "java(new java.util.Date())")
@@ -42,6 +46,7 @@ public abstract class ProductMapper {
     @Mapping(target = "categories", expression = "java(mapCategoryIdsToCategories(productRequest.getCategories()))")
     @Mapping(target = "specifications", expression = "java(mapSpecifications(productRequest.getSpecifications()))")
     @Mapping(target = "attributes", expression = "java(mapAttributes(productRequest.getAttributes()))")
+    @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
     public abstract Product toProduct(ProductRequest productRequest);
 
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")
@@ -49,6 +54,7 @@ public abstract class ProductMapper {
     @Mapping(target = "attributes", expression = "java(convertAttributesToDisplayNames(product.getAttributes()))")
     @Mapping(target = "priceRange", expression = "java(product.calculatePriceRanges())")
     @Mapping(target = "discountPriceRange", expression = "java(product.calculateDiscountPriceRanges())")
+    @Mapping(target = "collections", expression = "java(mapToCollectionResponsies(product.getCollections()))")
     public abstract ProductResponse toProductResponse(Product product);
 
     @Mapping(target = "id", ignore = true)
@@ -78,6 +84,19 @@ public abstract class ProductMapper {
         return categoryIds.stream()
                 .map(id -> categoryRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Category not found with id: " + id)))
+                .collect(Collectors.toList());
+    }
+
+    protected List<Collection> mapCollectionIdsToCollections(List<String> collectionIds) {
+        return collectionIds.stream()
+                .map(id -> collectionRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("Collection not found with id: " + id)))
+                .collect(Collectors.toList());
+    }
+
+    protected List<CollectionResponse> mapToCollectionResponsies(List<Collection> collections) {
+        return collections.stream()
+                .map(collectionMapper::convertToResponse)
                 .collect(Collectors.toList());
     }
 

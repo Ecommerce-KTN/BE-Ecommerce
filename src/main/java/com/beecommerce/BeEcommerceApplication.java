@@ -1,9 +1,11 @@
 package com.beecommerce;
 
 import com.beecommerce.models.*;
+import com.beecommerce.models.Collection;
 import com.beecommerce.models.enums.ProductOption;
 import com.beecommerce.models.enums.SpecificationOption;
 import com.beecommerce.repositories.CategoryRepository;
+import com.beecommerce.repositories.CollectionRepository;
 import com.beecommerce.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

@@ -24,6 +24,7 @@ public class ProductRequest {
     private String shop;
     private MultipartFile primaryImage;
     private List<MultipartFile> images;
+    private long quantity;
     private String sellingType;
     private ShapeRequest shape;
     private String description;
@@ -34,4 +35,5 @@ public class ProductRequest {
     private Map<String, String> specifications;
     private Map<String, List<String>> attributes;
     private List<ProductVariantRequest> productVariants;
+    private List<String> collections;
 }
