@@ -12,7 +12,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductVariantResponse {
-    private String id;
     private Double basePrice;
     private Double discountPrice;
     private Double price;

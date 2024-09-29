@@ -11,6 +11,7 @@ import com.beecommerce.repositories.CollectionRepository;
 import com.beecommerce.services.S3Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,14 +39,14 @@ public abstract class ProductMapper {
     protected CollectionRepository collectionRepository;
 
     @Mapping(target = "primaryImage", expression = "java(productRequest.getPrimaryImage() == null || productRequest.getPrimaryImage().isEmpty() ? null : uploadPrimaryImageToS3(productRequest.getPrimaryImage()))")
-    @Mapping(target = "images", expression = "java(productRequest.getImages() == null || productRequest.getImages().isEmpty() ? null : uploadImagesToS3(productRequest.getImages()))")
+    @Mapping(target = "images", ignore = true, expression = "java(productRequest.getImages() == null || productRequest.getImages().isEmpty() ? null : uploadImagesToS3(productRequest.getImages()))")
     @Mapping(target = "createdTime", expression = "java(new java.util.Date())")
     @Mapping(target = "avgRating", ignore = true)
     @Mapping(target = "reviewCount", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", expression = "java(mapCategoryIdsToCategories(productRequest.getCategories()))")
     @Mapping(target = "specifications", expression = "java(mapSpecifications(productRequest.getSpecifications()))")
-    @Mapping(target = "attributes", expression = "java(mapAttributes(productRequest.getAttributes()))")
+    @Mapping(target = "attributes", ignore = true, expression = "java(mapAttributes(productRequest.getAttributes()))")
     @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
     public abstract Product toProduct(ProductRequest productRequest);
 
@@ -57,9 +58,10 @@ public abstract class ProductMapper {
     @Mapping(target = "collections", expression = "java(mapToCollectionResponsies(product.getCollections()))")
     public abstract ProductResponse toProductResponse(Product product);
 
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "images", expression = "java(variantRequest.getImages() == null || variantRequest.getImages().isEmpty() ? null : uploadImagesToS3(variantRequest.getImages()))")
     @Mapping(target = "attributes",  expression = "java(mapAttributesProductVariant(variantRequest.getAttributes()))")
+    @Mapping(target = "sold", ignore = true)
+
     public abstract ProductVariant toProductVariant(ProductVariantRequest variantRequest);
 
     @Mapping(target = "attributes", expression = "java(convertAttributesProductVariantToDisplayNames(productVariant.getAttributes()))")
@@ -70,14 +72,17 @@ public abstract class ProductMapper {
 
     public abstract ProductShape toProductShape(ShapeRequest shapeRequest);
 
+    @Named("uploadPrimaryImage")
     protected String uploadPrimaryImageToS3(MultipartFile file) {
-        return s3Service.uploadFileToS3(file);
+        return file != null && !file.isEmpty() ? s3Service.uploadFileToS3(file) : null;
     }
-
+    @Named("uploadImages")
     protected List<String> uploadImagesToS3(List<MultipartFile> files) {
-        return files.stream()
+        return files != null && !files.isEmpty()
+                ? files.stream()
                 .map(file -> s3Service.uploadFileToS3(file))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+                : null;
     }
 
     protected List<Category> mapCategoryIdsToCategories(List<String> categoryIds) {

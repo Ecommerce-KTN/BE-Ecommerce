@@ -15,8 +15,6 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ProductVariantRequest {
-
-
     private Double basePrice;
     private Double discountPrice;
     private Double price;
