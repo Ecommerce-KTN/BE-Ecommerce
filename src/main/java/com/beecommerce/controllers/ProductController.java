@@ -15,6 +15,7 @@ import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.ReviewService;
 import com.beecommerce.services.S3Service;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
+@Validated
 public class ProductController {
 
     @Autowired
@@ -49,14 +52,22 @@ public class ProductController {
 
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ProductResponse> addProduct(@ModelAttribute ProductRequest productRequest) throws IOException {
+    public ResponseEntity<ApiResponse<?>> addProduct(@Valid @ModelAttribute ProductRequest productRequest) {
         Product product = productMapper.toProduct(productRequest);
-        Product savedProduct = productService.createProduct(product);
-        ProductResponse productResponse = productMapper.toProductResponse(savedProduct);
-        return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
+        ProductResponse productResponse = productMapper.toProductResponse(product);
+        if(productResponse == null) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
+        return ResponseEntity.ok(ApiResponse.<ProductResponse>builder()
+                .success(true)
+                .message(SuccessCode.PRODUCT_CREATED.getMessage())
+                .data(productResponse)
+                .build());
     }
-
-
 
 
     @GetMapping

@@ -16,10 +16,13 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ProductRequest {
+    @NonNull
     @NotBlank
     @Size(min = 5, max = 120)
     private String name;
-
+    @NonNull
+    @NotBlank
+    @Size(min = 5, max = 120)
     private String brand;
     private String shop;
     private MultipartFile primaryImage;

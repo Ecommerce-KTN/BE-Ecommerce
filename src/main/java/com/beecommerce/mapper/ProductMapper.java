@@ -41,13 +41,14 @@ public abstract class ProductMapper {
     @Mapping(target = "primaryImage", expression = "java(productRequest.getPrimaryImage() == null || productRequest.getPrimaryImage().isEmpty() ? null : uploadPrimaryImageToS3(productRequest.getPrimaryImage()))")
     @Mapping(target = "images", ignore = true, expression = "java(productRequest.getImages() == null || productRequest.getImages().isEmpty() ? null : uploadImagesToS3(productRequest.getImages()))")
     @Mapping(target = "createdTime", expression = "java(new java.util.Date())")
-    @Mapping(target = "avgRating", ignore = true)
-    @Mapping(target = "reviewCount", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "categories", expression = "java(mapCategoryIdsToCategories(productRequest.getCategories()))")
     @Mapping(target = "specifications", expression = "java(mapSpecifications(productRequest.getSpecifications()))")
     @Mapping(target = "attributes", ignore = true, expression = "java(mapAttributes(productRequest.getAttributes()))")
     @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
+    @Mapping(target = "name", expression = "java(validateProductName(productRequest.getName()))")
+    @Mapping(target = "shop", ignore = true)
+    @Mapping(target = "brand", expression = "java(validateProductBrand(productRequest.getBrand()))")
     public abstract Product toProduct(ProductRequest productRequest);
 
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")
@@ -57,6 +58,28 @@ public abstract class ProductMapper {
     @Mapping(target = "discountPriceRange", expression = "java(product.calculateDiscountPriceRanges())")
     @Mapping(target = "collections",ignore = true, expression = "java(mapToCollectionResponsies(product.getCollections()))")
     public abstract ProductResponse toProductResponse(Product product);
+
+    protected String validateProductName(String name) {
+        name = name.trim();
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty.");
+        }
+        if (name.length() < 5 || name.length() > 120) {
+            throw new IllegalArgumentException("Product name must be between 5 and 120 characters.");
+        }
+        return name;
+    }
+
+    protected String validateProductBrand(String brand) {
+        brand = brand.trim();
+        if (brand == null || brand.isEmpty()) {
+            throw new IllegalArgumentException("Product brand cannot be empty.");
+        }
+        if (brand.length() < 5 || brand.length() > 120) {
+            throw new IllegalArgumentException("Product brand must be between 5 and 120 characters.");
+        }
+        return brand;
+    }
 
     @Mapping(target = "images", expression = "java(variantRequest.getImages() == null || variantRequest.getImages().isEmpty() ? null : uploadImagesToS3(variantRequest.getImages()))")
     @Mapping(target = "attributes",  expression = "java(mapAttributesProductVariant(variantRequest.getAttributes()))")
