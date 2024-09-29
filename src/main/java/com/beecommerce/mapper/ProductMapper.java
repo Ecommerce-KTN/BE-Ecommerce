@@ -48,7 +48,6 @@ public abstract class ProductMapper {
     @Mapping(target = "specifications", expression = "java(mapSpecifications(productRequest.getSpecifications()))")
     @Mapping(target = "attributes", ignore = true, expression = "java(mapAttributes(productRequest.getAttributes()))")
     @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
-    @Mapping(target = "name", expression = "java(productRequest.getName())")
     public abstract Product toProduct(ProductRequest productRequest);
 
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")
@@ -93,6 +92,7 @@ public abstract class ProductMapper {
     }
 
     protected List<Collection> mapCollectionIdsToCollections(List<String> collectionIds) {
+        if(collectionIds == null) return Collections.emptyList();
         return collectionIds.stream()
                 .map(id -> collectionRepository.findById(id)
                         .orElseThrow(() -> new RuntimeException("Collection not found with id: " + id)))
