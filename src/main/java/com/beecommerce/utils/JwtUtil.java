@@ -29,45 +29,64 @@ public class JwtUtil {
     }
 
     // generate JWT token
-    public String generateToken(Authentication authentication, Map<String, Object> customClaims){
-        String username = authentication.getName();
+//    public String generateToken(Authentication authentication, Map<String, Object> customClaims){
+//        String username = authentication.getName();
+//
+//        Date currentDate = new Date();
+//        Date expireDate = new Date(currentDate.getTime() + jwtExpirationDateMs);
+//
+//        return Jwts.builder()
+//                .issuer(issuer)
+//                .audience()
+//                .add(audience)
+//                .and()
+//                .subject(username)
+//                .issuedAt(currentDate)
+//                .expiration(expireDate)
+//                .notBefore(currentDate)
+//                .id(UUID.randomUUID().toString())
+//                .claims(customClaims)
+//                .signWith(secretKey)
+//                .compact();
+//    }
+//
+//    public String generateToken(String subject, Map<String, Object> customClaims){
+//        Date currentDate = new Date();
+//        Date expireDate = new Date(currentDate.getTime() + jwtExpirationDateMs);
+//
+//        return Jwts.builder()
+//                .issuer(issuer)
+//                .audience()
+//                .add(audience)
+//                .and()
+//                .subject(subject)
+//                .issuedAt(currentDate)
+//                .expiration(expireDate)
+//                .notBefore(currentDate)
+//                .id(UUID.randomUUID().toString())
+//                .claims(customClaims)
+//                .signWith(secretKey)
+//                .compact();
+//    }
 
+    // Generate JWT token
+    public String generateToken(String subject, Map<String, Object> claims) {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationDateMs);
 
         return Jwts.builder()
-                .issuer(issuer)
-                .audience()
-                .add(audience)
-                .and()
-                .subject(username)
-                .issuedAt(currentDate)
-                .expiration(expireDate)
-                .notBefore(currentDate)
-                .id(UUID.randomUUID().toString())
-                .claims(customClaims)
+                .setIssuer(issuer)
+                .setAudience(audience)
+                .setSubject(subject)
+                .setIssuedAt(currentDate)
+                .setExpiration(expireDate)
+                .setNotBefore(currentDate)
+                .setId(UUID.randomUUID().toString())
+                .addClaims(claims)
                 .signWith(secretKey)
                 .compact();
     }
 
-    public String generateToken(String subject, Map<String, Object> customClaims){
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtExpirationDateMs);
-
-        return Jwts.builder()
-                .issuer(issuer)
-                .audience()
-                .add(audience)
-                .and()
-                .subject(subject)
-                .issuedAt(currentDate)
-                .expiration(expireDate)
-                .notBefore(currentDate)
-                .id(UUID.randomUUID().toString())
-                .claims(customClaims)
-                .signWith(secretKey)
-                .compact();
-    }
 
 
     // get username from JWT token
@@ -101,11 +120,9 @@ public class JwtUtil {
         return claims;
     }
 
+    // Parse and validate token    public Claims getClaimsFromToken(String token) {
     public Claims getClaimsFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return parser.parseClaimsJws(token).getBody();
     }
+
 }

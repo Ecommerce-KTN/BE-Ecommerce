@@ -39,7 +39,7 @@ public class CategoryController {
         }
     }
 
-//    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {

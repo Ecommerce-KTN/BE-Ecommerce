@@ -9,9 +9,11 @@ import com.beecommerce.security.services.UserDetailsServiceImpl;
 import com.beecommerce.security.tokens.IdUsernamePasswordAuthenticationToken;
 import com.beecommerce.services.TokenService;
 import com.beecommerce.utils.CookieUtils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +31,7 @@ public class AuthController {
 
     @Autowired
     private TokenService tokenService;
+
 
 //    @PostMapping("/register")
 //    public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest req) {
@@ -133,6 +136,7 @@ public class AuthController {
         }
     }
 
+
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         String refreshToken = CookieUtils.extractTokenFromCookie(request, "refresh_token");
@@ -144,4 +148,5 @@ public class AuthController {
     public ResponseEntity<String> jwtTest() {
         return new ResponseEntity<>("Hello world", HttpStatus.OK);
     }
+
 }
