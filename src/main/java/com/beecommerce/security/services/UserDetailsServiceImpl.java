@@ -2,30 +2,23 @@ package com.beecommerce.security.services;
 
 import com.beecommerce.dto.request.RegisterRequest;
 import com.beecommerce.models.CustomUserDetails;
+import com.beecommerce.models.enums.Role;
 import com.beecommerce.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-
-// The service to provide user details regarding application security
-// It should only be used for managing user auth credentials and not be used for business logic.
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+
     @Autowired
     private UserRepository userRepo;
 
-    private final PasswordEncoder passwordEncoder;
-
     @Autowired
-    UserDetailsServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -34,10 +27,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Username not found: " + username);
         }
         return new CustomUserDetails(
-            user.getUsername(),
-            user.getPassword(),
-            user.getId(),
-            Collections.emptyList()
+                user.getUsername(),
+                user.getPassword(),
+                user.getId(),
+                user.getRole()
         );
     }
 
@@ -56,6 +49,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         String encodedPassword = passwordEncoder.encode(req.getPassword());
         user.setPassword(encodedPassword);
+
+        user.setRole(Role.USER);
 
         userRepo.save(user);
     }

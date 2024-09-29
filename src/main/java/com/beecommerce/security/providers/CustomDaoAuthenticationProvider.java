@@ -35,7 +35,14 @@ public class CustomDaoAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("password not match");
         }
 
-        IdUsernamePasswordAuthenticationToken authenticationToken = new IdUsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities(), userDetails.getUserId());
+        // Ensure authorities are set correctly
+        IdUsernamePasswordAuthenticationToken authenticationToken =
+                new IdUsernamePasswordAuthenticationToken(
+                        userDetails.getUsername(),
+                        userDetails.getPassword(),
+                        userDetails.getAuthorities(),
+                        userDetails.getUserId()
+                );
         return authenticationToken;
     }
 

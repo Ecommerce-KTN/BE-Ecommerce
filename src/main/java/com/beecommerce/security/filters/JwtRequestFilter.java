@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,11 +17,13 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
+
     private final AuthenticationProvider authenticationProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
         String jwtToken = extractTokenFromRequest(request);
 
         if (jwtToken == null) {
@@ -41,17 +42,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    /**
-     * <p>
-     *     Note: Token should be placed inside cookie.
-     *     For development and testing ease, token will be set in Bearer token.
-     * </p>
-     * @param request
-     * @return
-     */
     private String extractTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
