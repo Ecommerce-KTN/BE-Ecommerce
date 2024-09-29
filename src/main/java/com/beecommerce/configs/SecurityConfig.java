@@ -97,9 +97,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(e -> {
                     e
