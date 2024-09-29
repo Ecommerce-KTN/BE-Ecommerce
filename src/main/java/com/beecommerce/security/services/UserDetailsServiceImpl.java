@@ -35,6 +35,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public void registerUser(RegisterRequest req) {
+
+        validateRegisterRequest(req);
+
         if (userRepo.existsByUsername(req.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
@@ -53,5 +56,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setRole(Role.USER);
 
         userRepo.save(user);
+    }
+
+    private void validateRegisterRequest(RegisterRequest req) {
+        if (req.getUsername() == null || req.getUsername().isEmpty()) {
+            throw new RuntimeException("Username cannot be empty");
+        }
+        if (req.getUsername().length() < 4 || req.getUsername().length() > 20) {
+            throw new RuntimeException("Username must be between 4 and 20 characters");
+        }
+        if (req.getEmail() == null || !req.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new RuntimeException("Email should be valid");
+        }
+        if (req.getPassword() == null || req.getPassword().length() < 6) {
+            throw new RuntimeException("Password must be at least 6 characters");
+        }
     }
 }
