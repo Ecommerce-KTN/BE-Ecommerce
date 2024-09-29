@@ -60,8 +60,7 @@ public abstract class ProductMapper {
 
     @Mapping(target = "images", expression = "java(variantRequest.getImages() == null || variantRequest.getImages().isEmpty() ? null : uploadImagesToS3(variantRequest.getImages()))")
     @Mapping(target = "attributes",  expression = "java(mapAttributesProductVariant(variantRequest.getAttributes()))")
-    @Mapping(target = "sold", ignore = true)
-
+    @Mapping(target = "sold", ignore = true, expression = "java(0L)")
     public abstract ProductVariant toProductVariant(ProductVariantRequest variantRequest);
 
     @Mapping(target = "attributes", expression = "java(convertAttributesProductVariantToDisplayNames(productVariant.getAttributes()))")
