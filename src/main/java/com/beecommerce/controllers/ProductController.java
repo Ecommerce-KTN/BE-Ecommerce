@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class ProductController {
 
 
 
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> getAllProducts() {
         try {
@@ -85,7 +86,7 @@ public class ProductController {
     }
 
 
-
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable String id) {
         try {
@@ -129,6 +130,7 @@ public class ProductController {
 //        }
 //    }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String id) {
         try {
@@ -159,6 +161,7 @@ public class ProductController {
 
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/latest")
     public ResponseEntity<ApiResponse> getLatest20Products() {
         try {
@@ -175,6 +178,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String categoryId) {
         try {
@@ -198,6 +202,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/top-selling")
     public ResponseEntity<ApiResponse> getTopSellingProducts() {
         try {
@@ -222,6 +227,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/{productId}/related")
     public ResponseEntity<ApiResponse> getRelatedProducts(@PathVariable String productId) {
         try {
@@ -260,12 +266,13 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @PostMapping("{productId}/reviews")
     public ResponseEntity<?> getProductReviews(
             @PathVariable("productId") String productId,
             @RequestBody GetProductReviewsRequest dto,
             @PageableDefault(page = 0, size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-            ) {
+    ) {
         System.out.println(pageable);
         PaginatedResource<Review> result = reviewService.getProductReviewsPaginated(productId, dto, pageable);
         return new ResponseEntity<>(new ApiResponse<Object>(result, "Success", HttpStatus.OK.value(), true, null), HttpStatus.OK);

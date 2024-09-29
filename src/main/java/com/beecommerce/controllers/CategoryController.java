@@ -28,6 +28,7 @@ public class CategoryController {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest request) {
         try {
@@ -39,7 +40,7 @@ public class CategoryController {
         }
     }
 
-//    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
         try {
@@ -70,6 +71,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/10")
     public ResponseEntity<ApiResponse> get10Categories() {
         try {
@@ -100,6 +102,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/parents")
     public ResponseEntity<ApiResponse> getParentCategories() {
         try {
@@ -130,6 +133,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/subcategories/{parentId}")
     public ResponseEntity<ApiResponse> getSubCategories(@PathVariable String parentId) {
         try {
@@ -159,6 +163,8 @@ public class CategoryController {
                             .build());
         }
     }
+
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable String id) {
         try {
@@ -184,6 +190,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable String id, @RequestBody CategoryRequest categoryRequest) {
         try {
@@ -204,12 +211,14 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/parent/{parentCategoryId}")
     public ResponseEntity<Category> createSubCategory(@PathVariable String parentCategoryId, @RequestBody CategoryRequest categoryRequest) {
         Category subCategory = categoryService.createSubCategory(parentCategoryId, categoryRequest);
         return new ResponseEntity<>(subCategory, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable String id) {
         try {

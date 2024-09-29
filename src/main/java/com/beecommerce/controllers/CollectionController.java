@@ -10,6 +10,7 @@ import com.beecommerce.services.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class CollectionController {
     @Autowired
     private CollectionRepository collectionRepository;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse<CollectionResponse>> createCollection(@RequestBody CollectionRequest request) {
         try {
@@ -51,7 +53,8 @@ public class CollectionController {
                             .build());
         }
     }
-//    getAll
+    //    getAll
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<ApiResponse<List<CollectionResponse>>> getAllCollections() {
         try {
