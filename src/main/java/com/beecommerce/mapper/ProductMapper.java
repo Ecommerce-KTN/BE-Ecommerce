@@ -55,7 +55,7 @@ public abstract class ProductMapper {
     @Mapping(target = "attributes", expression = "java(convertAttributesToDisplayNames(product.getAttributes()))")
     @Mapping(target = "priceRange", expression = "java(product.calculatePriceRanges())")
     @Mapping(target = "discountPriceRange", expression = "java(product.calculateDiscountPriceRanges())")
-    @Mapping(target = "collections", expression = "java(mapToCollectionResponsies(product.getCollections()))")
+    @Mapping(target = "collections",ignore = true, expression = "java(mapToCollectionResponsies(product.getCollections()))")
     public abstract ProductResponse toProductResponse(Product product);
 
     @Mapping(target = "images", expression = "java(variantRequest.getImages() == null || variantRequest.getImages().isEmpty() ? null : uploadImagesToS3(variantRequest.getImages()))")
