@@ -10,7 +10,6 @@ import lombok.*;
 @Builder
 @ToString
 public class ProductShape {
-    private String id;
     private String unitOfMass;
     private String unitOfLength;
     private Double weight;

@@ -37,7 +37,7 @@ public class Category {
     private Date createdTime;
     private String banner;
     private String icon;
-    private List<ProductOption> options= new ArrayList<>();
-    private List<SpecificationOption> specifications= new ArrayList<>();
+    private List<ProductOption> options;
+    private List<SpecificationOption> specifications;
 
 }

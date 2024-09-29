@@ -59,7 +59,7 @@ public abstract class ProductMapper {
 
     public abstract ShapeResponse toShapeResponse(ProductShape shape);
 
-    @Mapping(target = "id", ignore = true)
+
     public abstract ProductShape toProductShape(ShapeRequest shapeRequest);
 
     protected String uploadPrimaryImageToS3(MultipartFile file) {
