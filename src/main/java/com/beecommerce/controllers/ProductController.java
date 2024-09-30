@@ -45,8 +45,6 @@ public class ProductController {
     private CartService cartService;
     @Autowired
     private ReviewService reviewService;
-    @Autowired
-    private final S3Service s3Service;
 
     @Autowired
     private final ProductMapper productMapper;
@@ -55,8 +53,15 @@ public class ProductController {
 
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<?>> addProduct(@ModelAttribute ProductRequest productRequest) {
+    public ResponseEntity<ApiResponse<?>> addProduct(@Valid @ModelAttribute ProductRequest productRequest) {
         Product product = productRepository.save(productMapper.toProduct(productRequest));
+        if(product.toString().isEmpty()) {
+            return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
+                    .body(ApiResponse.builder()
+                            .success(false)
+                            .message(ErrorCode.DATABASE_ERROR.getMessage())
+                            .build());
+        }
         ProductResponse productResponse = productMapper.toProductResponse(product);
         return ResponseEntity.ok(ApiResponse.<ProductResponse>builder()
                 .success(true)
@@ -64,7 +69,6 @@ public class ProductController {
                 .data(productResponse)
                 .build());
     }
-
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllProducts() {

@@ -14,6 +14,8 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class ProductVariant {
+    @Id
+    private String id;
     private Double basePrice;
     private Double discountPrice;
     private Double price;

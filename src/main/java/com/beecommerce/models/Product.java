@@ -26,8 +26,12 @@ import java.util.Map;
 public class Product {
     @Id
     private String id;
+    @NotEmpty(message = "Product name cannot be empty.")
+    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
     private String primaryImage;
+    @NotEmpty(message = "Product brand cannot be empty.")
+    @Size(min = 5, max = 120, message = "Product brand must be between 5 and 120 characters.")
     private String brand;
     private String shop;
     private long quantity;
@@ -46,6 +50,7 @@ public class Product {
     private List<ProductVariant> productVariants;
     private Long reviewCount;
     private Double avgRating;
+    private long sold;
     private List<Collection> collections;
 
     public String calculatePriceRanges() {
