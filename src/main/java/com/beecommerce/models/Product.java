@@ -6,6 +6,7 @@ import com.beecommerce.models.enums.SpecificationOption;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -25,10 +26,13 @@ import java.util.Map;
 public class Product {
     @Id
     private String id;
-    @NotBlank(message = "Product name cannot be empty.")
+    @NotEmpty(message = "Product name cannot be empty or null.")
     @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
+    @NotEmpty(message = "Product primary image cannot be empty or null.")
     private String primaryImage;
+    @NotEmpty(message = "Product brand cannot be empty or null.")
+    @Size(min = 5, max = 120, message = "Product brand must be between 5 and 120 characters.")
     private String brand;
     private String shop;
     private long quantity;

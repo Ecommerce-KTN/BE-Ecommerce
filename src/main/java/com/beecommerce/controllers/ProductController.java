@@ -11,6 +11,7 @@ import com.beecommerce.mapper.ProductMapper;
 import com.beecommerce.models.Product;
 import com.beecommerce.dto.request.GetProductReviewsRequest;
 import com.beecommerce.models.Review;
+import com.beecommerce.repositories.ProductRepository;
 import com.beecommerce.services.CartService;
 import com.beecommerce.services.ProductService;
 import com.beecommerce.services.ReviewService;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-@Validated
+@Valid
 public class ProductController {
 
     @Autowired
@@ -49,19 +50,21 @@ public class ProductController {
 
     @Autowired
     private final ProductMapper productMapper;
+    @Autowired
+    private ProductRepository productRepository;
 
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ApiResponse<?>> addProduct(@Valid @ModelAttribute ProductRequest productRequest) {
-        Product product = productMapper.toProduct(productRequest);
-        ProductResponse productResponse = productMapper.toProductResponse(product);
-        if(productResponse == null) {
+        Product product = productRepository.save(productMapper.toProduct(productRequest));
+        if(product.toString().isEmpty()) {
             return ResponseEntity.status(ErrorCode.DATABASE_ERROR.getStatusCode())
                     .body(ApiResponse.builder()
                             .success(false)
                             .message(ErrorCode.DATABASE_ERROR.getMessage())
                             .build());
         }
+        ProductResponse productResponse = productMapper.toProductResponse(product);
         return ResponseEntity.ok(ApiResponse.<ProductResponse>builder()
                 .success(true)
                 .message(SuccessCode.PRODUCT_CREATED.getMessage())

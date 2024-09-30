@@ -2,6 +2,7 @@ package com.beecommerce.dto.request;
 
 import com.beecommerce.models.enums.ProductOption;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,15 +17,14 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ProductRequest {
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 120)
+    @NotEmpty(message = "Product name cannot be empty or null.")
+    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
-    @NonNull
-    @NotBlank
-    @Size(min = 5, max = 120)
+    @NotEmpty(message = "Product name cannot be empty or null.")
+    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String brand;
     private String shop;
+    @NotEmpty(message = "Product primary image cannot be empty or null.")
     private MultipartFile primaryImage;
     private List<MultipartFile> images;
     private long quantity;

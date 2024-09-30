@@ -9,10 +9,12 @@ import com.beecommerce.models.enums.SpecificationOption;
 import com.beecommerce.repositories.CategoryRepository;
 import com.beecommerce.repositories.CollectionRepository;
 import com.beecommerce.services.S3Service;
+import jakarta.validation.Valid;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
@@ -22,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class ProductMapper {
-
     @Autowired
     protected S3Service s3Service;
 
@@ -46,9 +47,10 @@ public abstract class ProductMapper {
     @Mapping(target = "specifications", expression = "java(mapSpecifications(productRequest.getSpecifications()))")
     @Mapping(target = "attributes", ignore = true, expression = "java(mapAttributes(productRequest.getAttributes()))")
     @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
-    @Mapping(target = "name", expression = "java(validateProductName(productRequest.getName()))")
     @Mapping(target = "shop", ignore = true)
-    @Mapping(target = "brand", expression = "java(validateProductBrand(productRequest.getBrand()))")
+    @Mapping(target = "name", expression = "java((productRequest.getName() == null || productRequest.getName().isEmpty() || productRequest.getName().trim().length() < 5 || productRequest.getName().trim().length() > 120) ? null : productRequest.getName().trim())")
+    @Mapping(target = "brand", expression = "java((productRequest.getBrand() == null || productRequest.getBrand().isEmpty() || productRequest.getBrand().trim().length() < 5 || productRequest.getBrand().trim().length() > 120) ? null : productRequest.getBrand().trim())")
+    @Mapping(target = "description", expression = "java((productRequest.getDescription() == null || productRequest.getDescription().isEmpty()) ? null : productRequest.getDescription())")
     public abstract Product toProduct(ProductRequest productRequest);
 
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")
@@ -59,27 +61,7 @@ public abstract class ProductMapper {
     @Mapping(target = "collections",ignore = true, expression = "java(mapToCollectionResponsies(product.getCollections()))")
     public abstract ProductResponse toProductResponse(Product product);
 
-    protected String validateProductName(String name) {
-        name = name.trim();
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty.");
-        }
-        if (name.length() < 5 || name.length() > 120) {
-            throw new IllegalArgumentException("Product name must be between 5 and 120 characters.");
-        }
-        return name;
-    }
 
-    protected String validateProductBrand(String brand) {
-        brand = brand.trim();
-        if (brand == null || brand.isEmpty()) {
-            throw new IllegalArgumentException("Product brand cannot be empty.");
-        }
-        if (brand.length() < 5 || brand.length() > 120) {
-            throw new IllegalArgumentException("Product brand must be between 5 and 120 characters.");
-        }
-        return brand;
-    }
 
     @Mapping(target = "images", expression = "java(variantRequest.getImages() == null || variantRequest.getImages().isEmpty() ? null : uploadImagesToS3(variantRequest.getImages()))")
     @Mapping(target = "attributes",  expression = "java(mapAttributesProductVariant(variantRequest.getAttributes()))")
