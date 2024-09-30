@@ -4,6 +4,7 @@ import com.beecommerce.dto.ShapeResponse;
 import com.beecommerce.models.ProductShape;
 import com.beecommerce.models.enums.ProductOption;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ProductResponse {
+    @Id
     private String id;
     private String name;
     private String primaryImage;
@@ -39,4 +41,4 @@ public class ProductResponse {
     private String priceRange;
     private String discountPriceRange;
     private List<CollectionResponse> collections;
-}
+    private long sold;}

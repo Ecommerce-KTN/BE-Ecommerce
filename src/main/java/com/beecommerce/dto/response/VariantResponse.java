@@ -2,6 +2,7 @@ package com.beecommerce.dto.response;
 
 import com.beecommerce.models.enums.ProductOption;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class VariantResponse {
+    @Id
     private String id;
     private Double basePrice;
     private Double discountPrice;
