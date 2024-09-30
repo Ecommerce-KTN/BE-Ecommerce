@@ -26,13 +26,8 @@ import java.util.Map;
 public class Product {
     @Id
     private String id;
-    @NotEmpty(message = "Product name cannot be empty or null.")
-    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
-    @NotEmpty(message = "Product primary image cannot be empty or null.")
     private String primaryImage;
-    @NotEmpty(message = "Product brand cannot be empty or null.")
-    @Size(min = 5, max = 120, message = "Product brand must be between 5 and 120 characters.")
     private String brand;
     private String shop;
     private long quantity;

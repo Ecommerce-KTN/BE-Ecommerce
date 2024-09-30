@@ -48,9 +48,6 @@ public abstract class ProductMapper {
     @Mapping(target = "attributes", ignore = true, expression = "java(mapAttributes(productRequest.getAttributes()))")
     @Mapping(target = "collections", expression = "java(mapCollectionIdsToCollections(productRequest.getCollections()))")
     @Mapping(target = "shop", ignore = true)
-    @Mapping(target = "name", expression = "java((productRequest.getName() == null || productRequest.getName().isEmpty() || productRequest.getName().trim().length() < 5 || productRequest.getName().trim().length() > 120) ? null : productRequest.getName().trim())")
-    @Mapping(target = "brand", expression = "java((productRequest.getBrand() == null || productRequest.getBrand().isEmpty() || productRequest.getBrand().trim().length() < 5 || productRequest.getBrand().trim().length() > 120) ? null : productRequest.getBrand().trim())")
-    @Mapping(target = "description", expression = "java((productRequest.getDescription() == null || productRequest.getDescription().isEmpty()) ? null : productRequest.getDescription())")
     public abstract Product toProduct(ProductRequest productRequest);
 
     @Mapping(target = "categories", expression = "java(mapToCategoryResponsies(product.getCategories()))")

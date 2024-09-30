@@ -17,14 +17,9 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class ProductRequest {
-    @NotEmpty(message = "Product name cannot be empty or null.")
-    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String name;
-    @NotEmpty(message = "Product name cannot be empty or null.")
-    @Size(min = 5, max = 120, message = "Product name must be between 5 and 120 characters.")
     private String brand;
     private String shop;
-    @NotEmpty(message = "Product primary image cannot be empty or null.")
     private MultipartFile primaryImage;
     private List<MultipartFile> images;
     private long quantity;
